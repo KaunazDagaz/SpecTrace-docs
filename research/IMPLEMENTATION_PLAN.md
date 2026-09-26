@@ -586,7 +586,9 @@ Also out of scope as a matter of law and course rules: any specification, code o
 
 The practice's own methodology calls a demonstrable, verifiable step a *veha* (milestone) and asks for no more than five tasks on the current one, each phrased as a result rather than a technical action — and asks that only the current milestone be broken into tasks; later ones stay at the outcome level until the current one is accepted. G-numbers below are the course's calendar gates; M1/M2/M3 are how the work is actually organised in Linear underneath them.
 
-### M1 (≈ G2), due 20 September — vertical slice
+### M1 (≈ G2), due 20 September — vertical slice (accepted 26 September)
+
+**Accepted on 26 September 2026**, by the student merging the [M1 acceptance note](../acceptance/m1-acceptance.md) (SpecTrace-docs PR #2). The last M1 PR merged on 25 September, five days after the due date.
 
 Result: given one specification document, the pipeline produces a verified requirements register, traceable test cases, and a matrix with visible gaps — and the whole run replays offline, from a committed cache, with no API key, in CI.
 
@@ -600,13 +602,101 @@ Result: given one specification document, the pipeline produces a verified requi
 
 **M1 is accepted when task 5 is green and a human has watched a real matrix come out of a real run.**
 
-### M2 (≈ G3), due 27 September — outcome level only
+### M2 (≈ G3), due 30 September — current milestone
 
-Result: a reviewer can accept, edit, or reject every proposed test case with the decision permanently recorded; there is a measured number — not an impression — for how much better the verified pipeline does than an unverified one, on both the primary document and a second, unfamiliar one.
+#### Milestone M2 — description
 
-Depends on: M1 accepted, and its retrospective.
+A reviewer can accept, edit or reject every proposed case with the decision permanently recorded, and there is a measured number — not an impression — for how much better the verified pipeline does than an unverified one, on RFC 6902 and on a second, less familiar document. Shown at G3 on 27 September: the headline metric per arm (SPEC-6). Target date: 30 September, feature freeze.
 
-Not broken into tasks yet, per the methodology — only the current milestone gets that detail. When M1 lands, M2's tasks are drawn from the REQ-REV, REQ-EXP, and REQ-DEP-02 items already specified in `TOR.md` §4.6–4.8, checked against what M1 actually produced — not rewritten from this plan in advance.
+#### SPEC-6 — Every arm has a measured share of claims that cannot be found in the source
+
+Priority: Urgent · Due: 27 Sep
+
+Result: for the chat arm, the naive baseline and the full pipeline there is one number each — the share of claimed requirements whose quote cannot be located in the document — on RFC 6902 and on a second, less familiar document. This is the headline metric, and it needs no ground truth.
+
+Context: TOR REQ-EXP-01, REQ-EXP-04, REQ-EXP-05, and the verification-rate and cost fields of REQ-EXP-03; Blueprint §6; Implementation Plan §7.3, §8.2.
+
+In scope: the baseline arm with a naive prompt that asks for requirements with quotes, shared verbatim with the chat arm — P0 as written asks for test cases only, so its output holds nothing the verifier can check; one deterministic parser for the baseline and the chat transcripts; a command that scores an externally produced list of claimed requirements; choosing, license-checking and adding the second document to the corpus; running the pipeline and the baseline on it; a metrics report per arm with verification rate, calls, tokens and cache hit rate; a headline table that CI recomputes offline.
+
+Out of scope: precision, recall and F1 (SPEC-8); any change to the verifier; any change to the pipeline's own prompts.
+
+Dependencies: none. The student captures the chat transcripts verbatim, with a share link, and picks the second document from candidates the agent proposes. No model reads or converts the transcripts — the parser does, so a chat quote can never be corrected towards the source.
+
+Acceptance: experiments/ holds a metrics file per arm per document with the verification rate; for the pipeline both the raw and the delivered share are reported, the delivered one presented as zero by design; the chat arm is labelled as not reproducible, with the reason; both chat results are reported whichever way they come out; the headline table regenerates offline in CI.
+
+Evidence: PR link, metrics files, experiments/headline.md, archived transcripts, the license note for the second document.
+
+#### SPEC-7 — There is a hand-made ground truth the tooling trusts
+
+Priority: Urgent · Due: 27 Sep
+
+Result: RFC 6902 has a gold standard of 30–50 requirements written by the student under frozen rules, and the tooling loads it only if every quote is found in the document.
+
+Context: TOR §9; Implementation Plan §8.3; Blueprint §6.
+
+In scope: annotation rules in spectrace-docs, written and frozen before annotation starts — what counts as one requirement, how a sentence with two obligations is split, whether RECOMMENDED counts as SHOULD; the gold file, each entry a verbatim quote with modality and testability; a loader that resolves every quote through the existing resolver and rejects the whole file if any quote does not resolve.
+
+Out of scope: metrics (SPEC-8); a gold standard for the second document.
+
+Dependencies: none. The annotation is the student's work. The agent builds only the loader and never writes, completes or edits annotations: a ground truth written by a model would make the experiment grade the model against itself.
+
+Acceptance: the rules file is committed before the first annotation commit; the gold file loads with zero unresolved quotes; it holds between 30 and 50 requirements.
+
+Evidence: links to the rules commit and the gold file commit, loader test output.
+
+#### SPEC-8 — Extraction quality is measured against the ground truth
+
+Priority: High · Due: 29 Sep
+
+Result: precision, recall and F1 of extraction against the gold standard for the pipeline and the baseline, an answer to whether chunking is needed, and a written analysis of the errors.
+
+Context: TOR REQ-EXP-02, REQ-EXP-03, REQ-EXT-03; Implementation Plan §8.4–8.6.
+
+In scope: span-overlap matching — a match needs at least 50% overlap of the shorter span, each gold requirement is matched at most once, greedy by overlap size; how the results shift at 30% and 70%, since 50% is a judgment call; precision, recall, F1 and modality accuracy per arm; recall by position in the document, with the chunking decision recorded either way; an error analysis with categorised samples of rejected quotes, missed gold requirements and unmatched predictions.
+
+Out of scope: changing prompts or the pipeline to improve the numbers — a finding goes into the analysis, and a change becomes a new task.
+
+Dependencies: SPEC-7 (gold standard), SPEC-6 (baseline arm).
+
+Acceptance: matching and metrics are unit-tested on hand-built fixtures with known expected values; experiments/{runId}.metrics.json holds every field REQ-EXP-03 lists; the chunking decision and the error analysis are written in experiments/.
+
+Evidence: PR link, test output, metrics files, the error analysis.
+
+#### SPEC-9 — A reviewer can accept, edit or reject each test case, and every decision is kept
+
+Priority: High · Due: 29 Sep
+
+Result: in a browser, a reviewer sees each requirement's quote in its source context together with its test cases, accepts, edits or rejects each case, and the matrix reflects every decision.
+
+Context: TOR REQ-REV-01, REQ-REV-02; Implementation Plan §10.1; Blueprint P6.
+
+In scope: three server-rendered pages — run overview, review, matrix; decisions appended to runs/{runId}/reviews.jsonl with author and timestamp; an edited case keeps its original alongside; resolving decision-queue items as testable, not testable or deferred, which the amended I4 already accounts for. Timebox: two days — if it overruns, stop and report rather than cut corners.
+
+Out of scope: authentication, a database, any JavaScript framework, deployment (SPEC-10).
+
+Dependencies: none.
+
+Acceptance: a manual walkthrough of the full RFC 6902 review; after several decisions the log shows one line per decision and no line has changed; a rejected case and a human "not testable" decision change the matrix exactly as I4 says.
+
+Evidence: PR link, walkthrough notes or screenshots, a sample of reviews.jsonl.
+
+#### SPEC-10 — The review UI runs at a public URL with no key anywhere
+
+Priority: Medium · Due: 30 Sep
+
+Result: anyone with the link opens the review UI over the reference run; the deployment holds no model key and makes no model calls.
+
+Context: TOR REQ-DEP-02, NFR-06; Implementation Plan §10.2; decisions.md §4.
+
+In scope: a container build; Cloud Run deployment in offline mode with scale to zero and a /health endpoint; the billing-enabled deployment project kept separate from the AI Studio key project; a budget alert; maximum instances capped at one; the teardown steps written down.
+
+Out of scope: live model calls from the deployed app, custom domains, authentication.
+
+Dependencies: SPEC-9. The student creates the Google Cloud project, billing and the budget alert.
+
+Acceptance: /health answers; the reference matrix and the review pages render at the public URL; no key is present in the image or the service configuration; the README records both project IDs, the service URL and the teardown steps, and says honestly whether review decisions on the public demo survive an instance restart.
+
+Evidence: service URL, deploy log or CI run, a screenshot of the budget alert.
 
 ### M3 (≈ G4), due 4 October — outcome level only
 
