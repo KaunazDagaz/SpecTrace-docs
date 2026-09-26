@@ -90,11 +90,21 @@ A derived view. Pure projection over the two collections above — it holds no d
 | REQ-…-1d4e08 | SHOULD | 5 | — | deferred by human |
 | REQ-…-90cc31 | MUST NOT | 4.4 | — | not testable in isolation |
 
+A requirement is `deferred by human` or `not testable in isolation` only after a logged human decision says so. The model's `testability` classification never sets either status. A requirement the model flags goes to the human decision queue (§2.4) and stays a **gap** until a human decides. Before any human decision exists, every row is either `covered` or `gap`. (TOR v1.1, REQ-MTX-02.)
+
 Plus an **orphan cases** section: test cases whose requirement no longer exists after a re-run.
 
 ### 2.4 Human decision queue
 
 Everything the system is not allowed to decide alone: ambiguous wording, a sentence carrying more than one obligation, a `SHOULD` with no context, a statement that cannot be checked by a single case. Each entry carries the quote and a question, never a guess.
+
+In the pipeline, the queue collects three kinds of item:
+
+- quotes that verification could not settle on its own: found more than once (§4.2 step 5), or claimed with conflicting readings;
+- verified requirements the model classified as `needs_human_decision` or `not_testable`;
+- generations where the model returned no cases and a `blocked_reason` (§7.2 rule 5).
+
+An item in the queue does not change coverage. The requirement stays a gap until a logged human decision resolves it (§2.3).
 
 ---
 
@@ -399,6 +409,8 @@ Output schema:
 }
 ```
 
+User prompt: the requirement's section number and its quote, whitespace-normalised, and nothing else. The document itself is never sent to a generation call. This is the grounding rule of REQ-GEN-01, and it is also a quota rule: a whole-document request per requirement would exhaust free-tier token limits within one run. The model never names requirement IDs; the code attaches the ID of the requirement it asked about. A response that does not match the schema is a failed call, never a partial success.
+
 ### 7.3 P0 — naive baseline (`baseline.system.md`)
 
 Deliberately weak. This is the control arm, not a strawman to be improved.
@@ -489,7 +501,7 @@ These run in CI in offline mode against the committed cache. They are the reason
 | I1 | For every requirement, `Raw[span.start..span.end]` normalises to exactly `requirement.text` normalised. |
 | I2 | Every `TestCase.RequirementIds` entry references a requirement present in the register. |
 | I3 | Every requirement in the register appears in the matrix exactly once. |
-| I4 | `Status == Gap` if and only if the requirement has zero non-rejected test cases. |
+| I4 | `Status == Gap` if and only if the requirement has zero non-rejected test cases and no logged human decision marks it not testable or deferred. A model's classification alone never sets a requirement to not testable or deferred; requirements the model flags go to the human decision queue and remain gaps until a human decides. |
 | I5 | No test case has an empty `RequirementIds`. |
 | I6 | Requirement IDs are unique within a run and identical across two runs over the same document with the same prompts. |
 | I7 | No requirement with `Verification == Failed` appears in the register or the matrix. |

@@ -1,7 +1,7 @@
 # SpecTrace — Terms of Reference (ТЗ)
 
 **Document status:** Draft, derived from `BLUEPRINT.md` — ready for technical review
-**Version:** 1.0
+**Version:** 1.1
 **Course:** EHU AI-Native Engineering Practice 2026 — LAB 04 Applied Intelligent Systems
 **Related documents:** `BLUEPRINT.md` (principles and scope, authoritative), `research/decisions.md` (engineering choices and their reasoning — the *why* behind the requirements below), `IMPLEMENTATION_PLAN.md` (detailed engineering design, prompts, and task sequence)
 **Approved by / date / version:** *(fill in once the supervisor signs off — the methodology requires the TOR agreed and saved with a version, same as the blueprint)*
@@ -19,6 +19,13 @@ Precedence, if the three documents ever disagree:
 3. `IMPLEMENTATION_PLAN.md` — how it gets built. Implementation details may be refined as engineering work reveals better approaches, provided every requirement below still holds.
 
 Requirements are numbered so each one traces to the milestone that demonstrates it and to the test that verifies it — the same discipline this project asks of the specifications it processes.
+
+### Revision history
+
+| Version | Date | Change | Reason |
+|---|---|---|---|
+| 1.0 | 16 September 2026 | First frozen version. | — |
+| 1.1 | 23 September 2026 | REQ-MTX-02 and the §3 definition of *Gap* now exclude a requirement only when a logged human decision marks it not testable or deferred. A model's testability classification alone never does. Requirements the model flags go to the human decision queue and stay gaps until a human decides. REQ-MTX-02's acceptance criterion now covers human decisions as well as requirements and cases. | Version 1.0 said a requirement is a gap *if and only if* it has zero non-rejected test cases. The implementation plan also has `NotTestable` and `DeferredByHuman` statuses, and by REQ-GEN-01 those requirements also have zero cases. The two could not both hold. Resolved under P6 (a logged human action turns a proposal into a decision) and P7 (no verdict of completeness): otherwise the model could make coverage look better without a human deciding anything. This is a same-principle refinement under §13(b), so `BLUEPRINT.md` does not change. Invariant I4 in `IMPLEMENTATION_PLAN.md` §9, `AGENTS.md` and `CLAUDE.md` changes with it. |
 
 ---
 
@@ -72,8 +79,7 @@ Full problem statement, user, and design rationale: `BLUEPRINT.md` §1–3, §9.
 | Quote | The verbatim text of a requirement, as returned by the model |
 | Span | The `[start, end)` character range in the raw source document where a quote is located |
 | Verification | The deterministic act of locating a quote's span in the source: `exact`, `ambiguous`, or `failed` |
-| Gap | A requirement with zero non-rejected test cases |
-| Arm | One configuration of the pipeline run for comparison (baseline vs. treatment) |
+| Gap | A requirement with zero non-rejected test cases and no logged human decision marking it not testable or deferred || Arm | One configuration of the pipeline run for comparison (baseline vs. treatment) |
 | Gold standard | The hand-annotated reference set of requirements for one document |
 
 ---
@@ -117,7 +123,7 @@ Each item states what the system SHALL do, how it is accepted, and the gate at w
 | ID | Requirement | Acceptance criterion | Gate |
 |---|---|---|---|
 | REQ-MTX-01 | The system SHALL derive the traceability matrix purely from the requirements register and the test case set, holding no independent state. | Deleting and regenerating the matrix from the same inputs yields an identical result. | G2 |
-| REQ-MTX-02 | A requirement's status SHALL be `gap` if and only if it has zero non-rejected test cases. | Property test over random requirement/case combinations. | G2 |
+| REQ-MTX-02 | A requirement's status SHALL be `gap` if and only if it has zero non-rejected test cases and no logged human decision marks it not testable or deferred. A model's classification alone SHALL NOT set a requirement to not testable or deferred. Requirements the model flags SHALL go to the human decision queue and remain gaps until a human decides. | Property test over random requirement, test case and human-decision combinations. A requirement the model flagged, with no human decision, is a gap. | G2 |
 | REQ-MTX-03 | A test case whose requirement no longer exists SHALL appear in a separate orphans section, never silently dropped. | Fixture: remove a requirement, confirm its case appears as orphaned. | G2 |
 
 ### 4.6 Human review
