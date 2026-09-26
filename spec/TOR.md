@@ -1,7 +1,7 @@
 # SpecTrace — Terms of Reference (ТЗ)
 
 **Document status:** Draft, derived from `BLUEPRINT.md` — ready for technical review
-**Version:** 1.1
+**Version:** 1.2
 **Course:** EHU AI-Native Engineering Practice 2026 — LAB 04 Applied Intelligent Systems
 **Related documents:** `BLUEPRINT.md` (principles and scope, authoritative), `research/decisions.md` (engineering choices and their reasoning — the *why* behind the requirements below), `IMPLEMENTATION_PLAN.md` (detailed engineering design, prompts, and task sequence)
 **Approved by / date / version:** *(fill in once the supervisor signs off — the methodology requires the TOR agreed and saved with a version, same as the blueprint)*
@@ -26,6 +26,7 @@ Requirements are numbered so each one traces to the milestone that demonstrates 
 |---|---|---|---|
 | 1.0 | 16 September 2026 | First frozen version. | — |
 | 1.1 | 23 September 2026 | REQ-MTX-02 and the §3 definition of *Gap* now exclude a requirement only when a logged human decision marks it not testable or deferred. A model's testability classification alone never does. Requirements the model flags go to the human decision queue and stay gaps until a human decides. REQ-MTX-02's acceptance criterion now covers human decisions as well as requirements and cases. | Version 1.0 said a requirement is a gap *if and only if* it has zero non-rejected test cases. The implementation plan also has `NotTestable` and `DeferredByHuman` statuses, and by REQ-GEN-01 those requirements also have zero cases. The two could not both hold. Resolved under P6 (a logged human action turns a proposal into a decision) and P7 (no verdict of completeness): otherwise the model could make coverage look better without a human deciding anything. This is a same-principle refinement under §13(b), so `BLUEPRINT.md` does not change. Invariant I4 in `IMPLEMENTATION_PLAN.md` §9, `AGENTS.md` and `CLAUDE.md` changes with it. |
+| 1.2 | 26 September 2026 | Four changes. (1) REQ-EXT-03, REQ-REV-01, REQ-REV-02, REQ-EXP-02, REQ-EXP-03, REQ-EXP-05 and REQ-DEP-02 move from gate G3 to *G3 / freeze*, which §4 defines. REQ-EXP-01 and REQ-EXP-04 stay at G3. (2) REQ-MTX-01 derives the matrix from the requirements register, the test case set and the review log. (3) §9: the gold standard holds every requirement the frozen annotation rules define, instead of 30–50 requirements. (4) §3: the *Gap* and *Arm* definitions, which ran together on one line in 1.1, are two rows again. | (1) The M2 plan in `IMPLEMENTATION_PLAN.md` §12 delivers these requirements on 29–30 September, after G3 on 27 September. The gate column would otherwise claim what the schedule does not deliver. (2) Version 1.1 made logged human decisions an input of REQ-MTX-02 but left REQ-MTX-01 naming only the register and the test cases. With the review UI (REQ-REV-02), the review log is where rejections and human decisions come from. (3) RFC 6902 carries a BCP 14 keyword in 18 sentences. Reaching 30 would mean counting statements the extraction prompt excludes, or padding the set to meet a number. The frozen rules fix the count, not a target. `BLUEPRINT.md` §4 changes with it, in version 1.1. (4) A formatting defect. All four are same-principle refinements under §13(b). No principle in `BLUEPRINT.md` §9 changes. |
 
 ---
 
@@ -79,14 +80,15 @@ Full problem statement, user, and design rationale: `BLUEPRINT.md` §1–3, §9.
 | Quote | The verbatim text of a requirement, as returned by the model |
 | Span | The `[start, end)` character range in the raw source document where a quote is located |
 | Verification | The deterministic act of locating a quote's span in the source: `exact`, `ambiguous`, or `failed` |
-| Gap | A requirement with zero non-rejected test cases and no logged human decision marking it not testable or deferred || Arm | One configuration of the pipeline run for comparison (baseline vs. treatment) |
+| Gap | A requirement with zero non-rejected test cases and no logged human decision marking it not testable or deferred |
+| Arm | One configuration of the pipeline run for comparison (baseline vs. treatment) |
 | Gold standard | The hand-annotated reference set of requirements for one document |
 
 ---
 
 ## 4. Functional requirements
 
-Each item states what the system SHALL do, how it is accepted, and the gate at which it must be demonstrated. Full technical detail behind each cross-reference lives in `IMPLEMENTATION_PLAN.md`.
+Each item states what the system SHALL do, how it is accepted, and the gate at which it must be demonstrated. Gate *G3 / freeze* means in progress at G3 on 27 September and complete by the feature freeze on 30 September. Full technical detail behind each cross-reference lives in `IMPLEMENTATION_PLAN.md`.
 
 ### 4.1 Ingestion and anchoring
 
@@ -101,7 +103,7 @@ Each item states what the system SHALL do, how it is accepted, and the gate at w
 |---|---|---|---|
 | REQ-EXT-01 | The system SHALL send the full document text to an LLM and receive candidate requirements as quote text, modality, and testability — never as positions or offsets. | Prompt schema contains no offset or line-number field. *(prompt: Implementation Plan §7.1)* | G2 |
 | REQ-EXT-02 | The system SHALL assign each requirement a stable ID derived from the document ID and a hash of its normalized quote. | Re-running extraction over an unchanged document and cache yields identical IDs. | G2 |
-| REQ-EXT-03 | IF measurement on the primary document shows extraction recall degrading for requirements located later in the document, THEN chunked extraction SHALL be added as a follow-up task; otherwise single-request extraction is final. | Recall-by-position analysis recorded under `experiments/`; the decision is documented either way. | G3 |
+| REQ-EXT-03 | IF measurement on the primary document shows extraction recall degrading for requirements located later in the document, THEN chunked extraction SHALL be added as a follow-up task; otherwise single-request extraction is final. | Recall-by-position analysis recorded under `experiments/`; the decision is documented either way. | G3 / freeze |
 
 ### 4.3 Verification
 
@@ -122,7 +124,7 @@ Each item states what the system SHALL do, how it is accepted, and the gate at w
 
 | ID | Requirement | Acceptance criterion | Gate |
 |---|---|---|---|
-| REQ-MTX-01 | The system SHALL derive the traceability matrix purely from the requirements register and the test case set, holding no independent state. | Deleting and regenerating the matrix from the same inputs yields an identical result. | G2 |
+| REQ-MTX-01 | The system SHALL derive the traceability matrix purely from the requirements register, the test case set and the review log, holding no independent state. | Deleting and regenerating the matrix from the same inputs yields an identical result. | G2 |
 | REQ-MTX-02 | A requirement's status SHALL be `gap` if and only if it has zero non-rejected test cases and no logged human decision marks it not testable or deferred. A model's classification alone SHALL NOT set a requirement to not testable or deferred. Requirements the model flags SHALL go to the human decision queue and remain gaps until a human decides. | Property test over random requirement, test case and human-decision combinations. A requirement the model flagged, with no human decision, is a gap. | G2 |
 | REQ-MTX-03 | A test case whose requirement no longer exists SHALL appear in a separate orphans section, never silently dropped. | Fixture: remove a requirement, confirm its case appears as orphaned. | G2 |
 
@@ -130,25 +132,25 @@ Each item states what the system SHALL do, how it is accepted, and the gate at w
 
 | ID | Requirement | Acceptance criterion | Gate |
 |---|---|---|---|
-| REQ-REV-01 | The system SHALL provide a review surface listing each requirement's quote, source context, and its test cases, with accept / edit / reject actions. | Manual walkthrough of one full document's review. *(page structure: Implementation Plan §10.1)* | G3 |
-| REQ-REV-02 | Every review decision SHALL be appended to a per-run, append-only log with author and timestamp; prior entries SHALL NOT be overwritten. | Inspecting the log after several decisions shows one line per decision, none mutated. | G3 |
+| REQ-REV-01 | The system SHALL provide a review surface listing each requirement's quote, source context, and its test cases, with accept / edit / reject actions. | Manual walkthrough of one full document's review. *(page structure: Implementation Plan §10.1)* | G3 / freeze |
+| REQ-REV-02 | Every review decision SHALL be appended to a per-run, append-only log with author and timestamp; prior entries SHALL NOT be overwritten. | Inspecting the log after several decisions shows one line per decision, none mutated. | G3 / freeze |
 
 ### 4.7 Experiment and scoring
 
 | ID | Requirement | Acceptance criterion | Gate |
 |---|---|---|---|
 | REQ-EXP-01 | The system SHALL provide a baseline arm using a single naive prompt with no verification or traceability, scored through the same quote-verification machinery as the treatment arm. *(prompt: Implementation Plan §7.3)* | Baseline run produces a verification-rate figure, not merely raw text. | G3 |
-| REQ-EXP-02 | The system SHALL score a run against a gold-annotated document using span-overlap matching: a match requires ≥50% overlap of the shorter span, each gold requirement matched at most once, greedy by overlap size. | Metric computation unit-tested against hand-built fixtures with a known expected result. | G3 |
-| REQ-EXP-03 | The system SHALL report, at minimum: extraction precision/recall/F1, quote-verification rate, modality accuracy, and cost (tokens, cache hit rate) per arm. | `experiments/{runId}.metrics.json` contains every listed field after a scored run. | G3 |
+| REQ-EXP-02 | The system SHALL score a run against a gold-annotated document using span-overlap matching: a match requires ≥50% overlap of the shorter span, each gold requirement matched at most once, greedy by overlap size. | Metric computation unit-tested against hand-built fixtures with a known expected result. | G3 / freeze |
+| REQ-EXP-03 | The system SHALL report, at minimum: extraction precision/recall/F1, quote-verification rate, modality accuracy, and cost (tokens, cache hit rate) per arm. | `experiments/{runId}.metrics.json` contains every listed field after a scored run. | G3 / freeze |
 | REQ-EXP-04 | The system SHALL accept an externally produced list of claimed requirements — including output captured by hand from a public chat interface — and score it through the same verification machinery, without that output having been generated by the pipeline. | A captured transcript, archived verbatim with timestamp and model identifier, yields a quote-verification rate. The results document states that this arm is not reproducible and explains why. | G3 |
-| REQ-EXP-05 | The illustrative arm SHALL be run against both the primary document and the less-known second document, and both results reported regardless of outcome. | Both figures appear in the error analysis, including the case where the untooled workflow performs well on the primary document. | G3 |
+| REQ-EXP-05 | The illustrative arm SHALL be run against both the primary document and the less-known second document, and both results reported regardless of outcome. | Both figures appear in the error analysis, including the case where the untooled workflow performs well on the primary document. | G3 / freeze |
 
 ### 4.8 Deployment and CI
 
 | ID | Requirement | Acceptance criterion | Gate |
 |---|---|---|---|
 | REQ-DEP-01 | The full pipeline SHALL run end-to-end in CI using only the committed cache, with no API key and no network call to the LLM provider. | CI job succeeds with `SPECTRACE_OFFLINE=1` and no secrets configured. | G2 |
-| REQ-DEP-02 | The review UI SHALL be deployed to a billing-enabled cloud project kept separate from the project holding the LLM API key. | Two distinct project IDs recorded in `README.md`, with a budget alert on the billing-enabled one. | G3 |
+| REQ-DEP-02 | The review UI SHALL be deployed to a billing-enabled cloud project kept separate from the project holding the LLM API key. | Two distinct project IDs recorded in `README.md`, with a budget alert on the billing-enabled one. | G3 / freeze |
 
 ---
 
@@ -213,7 +215,7 @@ Full field-level definitions are frozen in `IMPLEMENTATION_PLAN.md` §6 and SHAL
 ## 9. Validation plan
 
 - **Invariants I1–I8** (quote-span consistency, referential integrity, matrix correctness, Core/Llm isolation) run in CI against the committed cache on every push. Full list: `IMPLEMENTATION_PLAN.md` §9.
-- **Gold standard**: 30–50 hand-annotated requirements on the primary document; annotation rules frozen before annotation begins.
+- **Gold standard**: every requirement the annotation rules define in the primary document, hand-annotated, with the rules frozen before annotation begins. The count follows from the rules and is never padded towards a target.
 - **Experiment**: baseline vs. treatment, scored per REQ-EXP-02/03, with error analysis categorizing rejected quotes, missed requirements, and false positives.
 
 ---

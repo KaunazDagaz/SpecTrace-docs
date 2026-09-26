@@ -1,10 +1,10 @@
 # SpecTrace — Project Blueprint
 
-**Status:** Approved
-**Version:** 1.0
+**Status:** Version 1.0 approved; version 1.1 awaiting supervisor re-approval
+**Version:** 1.1
 **Course:** EHU AI-Native Engineering Practice 2026 — LAB 04 Applied Intelligent Systems
 **Author:** Mikita
-**Approved:** 16 September 2026, by the practice supervisor *(date assumed as today — correct if the actual date differs)*
+**Approved:** version 1.0 on 16 September 2026, by the practice supervisor *(date assumed as today — correct if the actual date differs)*. Version 1.1 is not yet approved.
 
 ---
 
@@ -15,6 +15,13 @@ This blueprint follows the seven-section template from the practice's own method
 Sections 1–7 below answer the seven questions the template requires, in the template's own order and naming (Russian label kept alongside the English one). Two further sections go beyond the template: the engineering choices already explored (§8), which the guide's own methodology places in a *later* research stage rather than in the blueprint itself, and the non-negotiable rules those choices must obey (§9).
 
 Two documents already exist downstream of this one — `TOR.md` (frozen, numbered requirements) and `IMPLEMENTATION_PLAN.md` (engineering detail) — written before this restructuring. `TOR.md`'s pointers into this document have been updated to match the new section numbers below; `IMPLEMENTATION_PLAN.md` does not cross-reference Blueprint sections and needs no change on that account.
+
+### Revision history
+
+| Version | Date | Change | Reason |
+|---|---|---|---|
+| 1.0 | 16 September 2026 | Approved. | — |
+| 1.1 | 26 September 2026 | §4: the size of the ground truth is set by the frozen annotation rules instead of being fixed at 30–50 requirements. | RFC 6902 carries a BCP 14 keyword in 18 sentences. Reaching 30 would mean counting statements the extraction prompt excludes, or padding the set to meet a number. `TOR.md` 1.2 §9 changes with it. No principle in §9 changes. Awaiting supervisor re-approval. |
 
 ---
 
@@ -56,7 +63,7 @@ With this system: every requirement is anchored to an exact, checkable location 
 *Какие сведения нужны, откуда они берутся, кому доступны?*
 
 - **Input:** one public specification document. The working candidate is IETF RFC 6902 (JSON Patch) — precise, numbered, normatively dense, and small enough to fit whole in a single request. Exact redistribution terms are assumed permissive but not yet formally confirmed — see §7.
-- **Ground truth:** a small hand-annotated set (30–50 requirements), built by the student directly from the same document, kept in the project's own documentation for scoring only.
+- **Ground truth:** a small hand-annotated set, built by the student directly from the same document under annotation rules frozen before annotation begins, holding every requirement those rules define. The first estimate was 30–50; RFC 6902 has fewer keyword-bearing sentences than that. Kept in the project's own documentation for scoring only.
 - **Generated data:** candidate requirements and test cases produced by the language model, cached to disk so nothing is requested twice.
 - **What never enters the system:** anything personal, and anything belonging to an employer — not as a default, as a hard boundary (§5).
 - **Access:** the whole project — code, cache, corpus, gold standard, run outputs — lives in a public repository. Nothing here is access-restricted, because nothing sensitive is ever admitted in the first place.
