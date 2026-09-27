@@ -212,7 +212,7 @@ spectrace-dev/
 │   └── SpecTrace.Pipeline.Tests/ # invariants, offline end-to-end
 ├── corpus/
 │   ├── rfc6902.txt
-│   └── gold/rfc6902.gold.json
+│   └── gold/rfc6902.gold.yaml
 ├── cache/                        # committed LLM response cache
 ├── runs/                         # run outputs (gitignored except the reference run)
 ├── experiments/                  # metric outputs, error analysis
@@ -452,21 +452,34 @@ Secondary question, once the provider is a parameter: **is a cheap model with st
 
 Manually annotate one document. Budget 5–7 hours; schedule it, it is the single largest non-code cost in the project.
 
-```json
-{
-  "document_id": "rfc6902",
-  "annotator": "<name>",
-  "annotated_at": "2026-09-…",
-  "annotation_rules": "docs/annotation-rules.md",
-  "requirements": [
-    { "gold_id": "G-001", "modality": "MUST", "section": "4.1",
-      "quote": "<verbatim>", "span": {"start": 8421, "end": 8535},
-      "testability": "testable" }
-  ]
-}
+The rules are [`spec/annotation-rules.md`](../spec/annotation-rules.md) in this repository, written **before** annotating and frozen when their pull request merges into `main`; they do not change during annotation. They settle up front what counts as one requirement, including whether a normative statement without a BCP 14 keyword counts; how a sentence with two obligations is split; whether `RECOMMENDED` and `SHOULD` are one class; and how a sentence that occurs more than once in the document is annotated. Rules written afterwards to fit the results are not a gold standard.
+
+Annotation starts from a worksheet that code generates from the document by a keyword scan, with no model call. It lists every sentence of the de-paginated text that carries an uppercase BCP 14 keyword, with its section, lines and keywords, and empty fields for the annotator. The annotator copies it to `corpus/gold/rfc6902.gold.yaml` in `spectrace-dev` and fills it in. YAML, because quotes full of `"` are copied into it by hand. The shape, with generated fields left as placeholders:
+
+```yaml
+document: rfc6902
+annotation_rules_commit: <the spectrace-docs commit that froze the rules>
+annotator: <name>
+annotated_at: 2026-09-…
+candidates:
+- candidate: <n>
+  section: "<section>"
+  lines: <first>-<last>
+  keywords: [<keyword>, …]
+  source: |-
+    <the source lines the sentence sits on>
+  sentence: >-
+    <the sentence, whitespace collapsed>
+  decision: <keep | drop>
+  obligations:
+  - quote: >-
+      <verbatim clause>
+    modality: <MUST | MUST_NOT | SHOULD | SHOULD_NOT | MAY>
+    testability: <testable | needs_human_decision | not_testable>
+    section: <empty, or the section, when the quote occurs more than once>
 ```
 
-Write `docs/annotation-rules.md` **before** annotating and do not change it during. Decide up front: does a sentence with two `MUST` clauses count as one requirement or two? Are `RECOMMENDED` and `SHOULD` the same class? Rules written afterwards to fit the results are not a gold standard.
+The loader accepts the file only if it names the frozen rules commit, every candidate the keyword scan finds has a decision, every modality and testability holds an allowed value, and every quote is found exactly once through the verifier's own resolver — within the entry's section when the entry names one. The section of each requirement is derived from its span. One failure rejects the whole file. `score --gold corpus/gold/rfc6902.gold.yaml --document corpus/rfc6902.txt` lists every failure with its line in the file and reports the number of requirements, which is whatever the rules yield.
 
 ### 8.4 Matching predicate
 
@@ -485,7 +498,7 @@ A predicted requirement matches a gold requirement when their spans overlap and 
 | Review outcome distribution | accepted / edited / rejected, per arm |
 | Cost | input + output tokens, wall-clock, cache hit rate |
 
-`spectrace score --run <id> --gold corpus/gold/rfc6902.gold.json` writes `experiments/{runId}.metrics.json`. Metric computation lives in `SpecTrace.Core` and is unit-tested against hand-built fixtures — a metric you cannot test is a metric you cannot defend.
+`spectrace score --run <id> --gold corpus/gold/rfc6902.gold.yaml` writes `experiments/{runId}.metrics.json`. Metric computation lives in `SpecTrace.Core` and is unit-tested against hand-built fixtures — a metric you cannot test is a metric you cannot defend.
 
 ### 8.6 Error analysis
 
@@ -743,7 +756,7 @@ milestone's tasks before the current one is accepted.
 - Test:       dotnet test
 - Run:        dotnet run --project src/SpecTrace.Cli -- run --document corpus/rfc6902.txt
 - Offline:    SPECTRACE_OFFLINE=1 dotnet run --project src/SpecTrace.Cli -- run --document corpus/rfc6902.txt
-- Score:      dotnet run --project src/SpecTrace.Cli -- score --run <id> --gold corpus/gold/rfc6902.gold.json
+- Score:      dotnet run --project src/SpecTrace.Cli -- score --run <id> --gold corpus/gold/rfc6902.gold.yaml
 
 ## Architectural boundaries
 - SpecTrace.Core contains domain logic only. No HTTP, no file I/O, no LLM
