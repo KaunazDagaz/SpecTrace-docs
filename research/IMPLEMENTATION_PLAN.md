@@ -485,6 +485,14 @@ The loader accepts the file only if it names the frozen rules commit, every cand
 
 A predicted requirement matches a gold requirement when their spans overlap and the overlap is at least 50% of the shorter span. Span overlap is far more robust than string equality — it survives a predicted quote that is one clause longer or shorter than the gold one. Each gold requirement matches at most one prediction (greedy by overlap size, highest first).
 
+The tie rules, fixed in SPEC-12 before any figure was computed:
+- A tie in overlap size goes to the gold requirement earlier in the document, then to the earlier claim.
+- Modality plays no part in pairing, so modality accuracy is measured on pairs chosen by span alone.
+- A claim whose quote is found more than once may match through any of its occurrences; those matches are reported separately.
+- A claim whose quote cannot be located is a false positive.
+
+Changing any of these is a decision recorded here before it is applied, never after seeing what it does to a figure.
+
 ### 8.5 Metrics
 
 | Metric | Definition |
@@ -493,12 +501,14 @@ A predicted requirement matches a gold requirement when their spans overlap and 
 | Not located share | (quotes not found + claimed requirements with no quote) ÷ claimed requirements. The headline safety metric, defined the same way for every arm. For B it is reported over the model's raw claims, and over the delivered register, where it is zero by construction. |
 | Quote verification rate | quotes located exactly once ÷ claimed requirements |
 | Found more than once share | quotes located at more than one place ÷ claimed requirements. With the two rows above it adds up to 100%. |
-| Modality accuracy | correct modality among matched pairs |
+| Modality accuracy | correct modality among matched pairs; n/a for an arm whose answer states no modality |
+| Recall by position | recall in each third of the document by line; each gold requirement belongs to the third that holds the first line of its span. The REQ-EXT-03 chunking rule compares B's raw claims in the first and the last third. |
+| Cost of verification | for every quote an arm gave that cannot be located, the closest stretch of the document by Levenshtein distance; similarity = 1 − distance ÷ quote length, threshold 0.90. It counts the gold requirements an arm reached only through such quotes and, for B, the gold requirements its raw claims match that the register holds back. Analysis only, never counted as a match. |
 | Gap detection accuracy | system's gap set vs. gap set after human review |
 | Review outcome distribution | accepted / edited / rejected, per arm |
 | Cost | input + output tokens, wall-clock, cache hit rate |
 
-`spectrace score --run <id> --gold corpus/gold/rfc6902.gold.yaml` writes `experiments/{runId}.metrics.json`. Metric computation lives in `SpecTrace.Core` and is unit-tested against hand-built fixtures — a metric you cannot test is a metric you cannot defend.
+`spectrace score --run <id> --gold corpus/gold/rfc6902.gold.yaml` writes `experiments/{runId}.metrics.json`. `score --headline` with `--gold` does so for every arm on the annotated document, and also writes `experiments/{documentId}.quality.md` and `experiments/chunking-decision.md`. Metric computation lives in `SpecTrace.Core` and is unit-tested against hand-built fixtures — a metric you cannot test is a metric you cannot defend.
 
 ### 8.6 Error analysis
 
