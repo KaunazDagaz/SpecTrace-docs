@@ -1,7 +1,7 @@
 # SpecTrace — Terms of Reference (ТЗ)
 
 **Document status:** Draft, derived from `BLUEPRINT.md` — ready for technical review
-**Version:** 1.2
+**Version:** 1.3
 **Course:** EHU AI-Native Engineering Practice 2026 — LAB 04 Applied Intelligent Systems
 **Related documents:** `BLUEPRINT.md` (principles and scope, authoritative), `research/decisions.md` (engineering choices and their reasoning — the *why* behind the requirements below), `IMPLEMENTATION_PLAN.md` (detailed engineering design, prompts, and task sequence)
 **Approved by / date / version:** *(fill in once the supervisor signs off — the methodology requires the TOR agreed and saved with a version, same as the blueprint)*
@@ -27,6 +27,7 @@ Requirements are numbered so each one traces to the milestone that demonstrates 
 | 1.0 | 16 September 2026 | First frozen version. | — |
 | 1.1 | 23 September 2026 | REQ-MTX-02 and the §3 definition of *Gap* now exclude a requirement only when a logged human decision marks it not testable or deferred. A model's testability classification alone never does. Requirements the model flags go to the human decision queue and stay gaps until a human decides. REQ-MTX-02's acceptance criterion now covers human decisions as well as requirements and cases. | Version 1.0 said a requirement is a gap *if and only if* it has zero non-rejected test cases. The implementation plan also has `NotTestable` and `DeferredByHuman` statuses, and by REQ-GEN-01 those requirements also have zero cases. The two could not both hold. Resolved under P6 (a logged human action turns a proposal into a decision) and P7 (no verdict of completeness): otherwise the model could make coverage look better without a human deciding anything. This is a same-principle refinement under §13(b), so `BLUEPRINT.md` does not change. Invariant I4 in `IMPLEMENTATION_PLAN.md` §9, `AGENTS.md` and `CLAUDE.md` changes with it. |
 | 1.2 | 26 September 2026 | Four changes. (1) REQ-EXT-03, REQ-REV-01, REQ-REV-02, REQ-EXP-02, REQ-EXP-03, REQ-EXP-05 and REQ-DEP-02 move from gate G3 to *G3 / freeze*, which §4 defines. REQ-EXP-01 and REQ-EXP-04 stay at G3. (2) REQ-MTX-01 derives the matrix from the requirements register, the test case set and the review log. (3) §9: the gold standard holds every requirement the frozen annotation rules define, instead of 30–50 requirements. (4) §3: the *Gap* and *Arm* definitions, which ran together on one line in 1.1, are two rows again. | (1) The M2 plan in `IMPLEMENTATION_PLAN.md` §12 delivers these requirements on 29–30 September, after G3 on 27 September. The gate column would otherwise claim what the schedule does not deliver. (2) Version 1.1 made logged human decisions an input of REQ-MTX-02 but left REQ-MTX-01 naming only the register and the test cases. With the review UI (REQ-REV-02), the review log is where rejections and human decisions come from. (3) RFC 6902 carries a BCP 14 keyword in 18 sentences. Reaching 30 would mean counting statements the extraction prompt excludes, or padding the set to meet a number. The frozen rules fix the count, not a target. `BLUEPRINT.md` §4 changes with it, in version 1.1. (4) A formatting defect. All four are same-principle refinements under §13(b). No principle in `BLUEPRINT.md` §9 changes. |
+| 1.3 | 27 September 2026 | §12: the open item on the second document is closed. The second, less-known document is RFC 10050, Protocol-Specific Profiles for JSContact (September 2026), and §11 names it. | SPEC-10 needed the document to run the pipeline, the baseline and the chat arm on it. RFC 10050 was chosen from three candidates (RFC 10050, RFC 10031, RFC 10022): recent Standards Track RFCs of a size close to RFC 6902 that revise or update no other RFC. It was published after the knowledge cutoff of the pipeline's model (March 2026), although its Internet-Drafts were public from February 2025. Like RFC 6902, it is subject to BCP 78 and the IETF Trust Legal Provisions, whose section 3.c.i allows copying it in full and without modification; the source, size, SHA-256 and licence are recorded in `corpus/SOURCES.md` in `spectrace-dev`. A same-principle refinement under §13(b). No principle in `BLUEPRINT.md` §9 changes. |
 
 ---
 
@@ -235,7 +236,7 @@ Full field-level definitions are frozen in `IMPLEMENTATION_PLAN.md` §6 and SHAL
 
 Condensed; full treatment in `BLUEPRINT.md` §7 and `IMPLEMENTATION_PLAN.md` §14.
 
-- Training-data contamination on the primary public document is assumed; a second, less-known document is planned to measure the gap (exact choice: see open item below).
+- Training-data contamination on the primary public document is assumed; a second, less-known document measures the gap: RFC 10050, Protocol-Specific Profiles for JSContact, published in September 2026.
 - Free-tier vendor quotas may change without notice; NFR-01's cache is the mitigation, not a workaround to remove later.
 - Single-annotator gold standard; no inter-annotator agreement figure will exist.
 - The illustrative arm (REQ-EXP-04) is not reproducible by construction and is reported as a demonstration with a verification figure attached, never as a controlled result. Extracting its claimed requirements from unstructured prose is manual work; budget for it.
@@ -247,7 +248,6 @@ Condensed; full treatment in `BLUEPRINT.md` §7 and `IMPLEMENTATION_PLAN.md` §1
 Everything else in this TOR is frozen. These remain conditional or unresolved on purpose, and should be closed during the component-by-component technical breakdown rather than guessed here:
 
 - exact provider SDK call shape and current free-tier rate limits — **VERIFY** at implementation time
-- specific second document for the contamination check (candidate: a recent, less widely known RFC — final pick pending availability and license check)
 - whether REQ-EXT-03's chunking trigger fires, decided only after the first real extraction run
 - confirmation of the primary document's redistribution terms and the provider's free-tier data-use policy, ahead of the final report (Blueprint §7)
 

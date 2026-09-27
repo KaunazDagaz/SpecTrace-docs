@@ -411,17 +411,21 @@ Output schema:
 
 User prompt: the requirement's section number and its quote, whitespace-normalised, and nothing else. The document itself is never sent to a generation call. This is the grounding rule of REQ-GEN-01, and it is also a quota rule: a whole-document request per requirement would exhaust free-tier token limits within one run. The model never names requirement IDs; the code attaches the ID of the requirement it asked about. A response that does not match the schema is a failed call, never a partial success.
 
-### 7.3 P0 — naive baseline (`baseline.system.md`)
+### 7.3 P0 — naive baseline (`baseline.user.md`)
 
-Deliberately weak. This is the control arm, not a strawman to be improved.
+Deliberately weak. This is the control arm, not a strawman to be improved. The chat arm (A0, §8.2) is given the same prompt word for word, so the baseline and the chat arm differ only in the channel.
 
 ```
-Generate test cases for the following specification. Return them as a numbered
-list with a title, input and expected result for each.
+List every requirement in the following specification. For each one, quote the
+exact sentence it comes from, then write test cases for it with a title, input
+and expected result.
 ```
 
-Baseline output is parsed loosely and then run through the same quote-verification
-machinery to measure how many of its claims can be located in the source at all.
+The prompt file holds this text on one line. It is sent as a single user message: the prompt, a blank line, then the document. There is no system prompt and no response schema, temperature is 0, and the output limit is the model's own (65,536 tokens for `gemini-3.5-flash-lite`), so our settings never cut the answer short. The provider's finish reason is recorded, so a truncation by the provider would be visible. The prompt was fixed before the first run and is not adjusted after seeing results.
+
+**Why this replaces the earlier P0.** The earlier prompt ("Generate test cases for the following specification. Return them as a numbered list with a title, input and expected result for each.") asked for test cases only. Its output held nothing the verifier could check, yet REQ-EXP-01 requires the baseline to be scored through the same quote verification as the treatment arm. The first formulation of the SPEC-10 card also asked for the keyword of each requirement; the adopted prompt does not, because the measured figure concerns quotes only.
+
+**Parsing.** One deterministic parser turns a free-text answer, from the baseline or from a chat transcript, into claimed requirements with their quotes. No model reads or converts either. The parser reads only the answer, never the document, and removes only the quotation marks or markup around a whole quote: it never corrects a quote towards the source. An item it recognises as a claim but cannot pair with a quote counts as a quote that cannot be located, and the number of such items is reported on its own. An answer it cannot split into items fails as a whole. Every quote is then resolved by the verifier's own matching, unchanged.
 
 ---
 
@@ -439,7 +443,8 @@ Secondary question, once the provider is a parameter: **is a cheap model with st
 
 | Arm | Description |
 |---|---|
-| A — baseline | P0 single naive prompt, no traceability, no verification. Same model, temperature 0. |
+| A0 — chat, illustrative | The §7.3 prompt, word for word, in a public chat interface, with the answer captured by hand. Not reproducible: the interface's model version, system prompt, sampling settings and tools are neither disclosed nor under our control, and a chat cannot be replayed from a cache. Reported for scale, never as a controlled result (REQ-EXP-04, REQ-EXP-05). |
+| A — baseline | P0 (§7.3): one naive prompt with the whole document, no system prompt, no schema, no traceability, no verification in the loop. Same model, temperature 0. |
 | B — treatment | Full pipeline with quote verification and traceability. |
 | C — optional | Arm B pipeline on a second model. Only if time permits. |
 
@@ -472,8 +477,9 @@ A predicted requirement matches a gold requirement when their spans overlap and 
 | Metric | Definition |
 |---|---|
 | Extraction precision / recall / F1 | against gold, span-overlap matching per §8.4 |
-| Quote verification rate | verified quotes ÷ quotes returned by the model |
-| Unverifiable claim rate | 1 − verification rate. The headline safety metric. |
+| Not located share | (quotes not found + claimed requirements with no quote) ÷ claimed requirements. The headline safety metric, defined the same way for every arm. For B it is reported over the model's raw claims, and over the delivered register, where it is zero by construction. |
+| Quote verification rate | quotes located exactly once ÷ claimed requirements |
+| Found more than once share | quotes located at more than one place ÷ claimed requirements. With the two rows above it adds up to 100%. |
 | Modality accuracy | correct modality among matched pairs |
 | Gap detection accuracy | system's gap set vs. gap set after human review |
 | Review outcome distribution | accepted / edited / rejected, per arm |
