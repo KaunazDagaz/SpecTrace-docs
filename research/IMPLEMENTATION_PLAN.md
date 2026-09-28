@@ -594,6 +594,8 @@ Never generate the API key inside the deployment project. **VERIFY** current fre
 
 Deployed service runs in offline mode against the committed cache, so **no API key is deployed**. The demo is the review UI over the reference run. Its run form stays offline too: it replays only documents in the committed cache, and any other upload ends with a cache-miss message, never a model call. A replay finishes inside the upload request, which matters because Cloud Run's request-based billing allocates CPU only while a request is being processed. Record the teardown plan in `README.md` (G4 requires it).
 
+As built in SPEC-14 (`research/decisions.md`, 28 September 2026): region `europe-north1`, service-level maximum of one instance, and a deploy from source that also uses Cloud Build and a Cloud Storage bucket in the deployment project. The reference run is read-only on the public demo.
+
 ### 10.3 CI
 
 `.github/workflows/ci.yml`, triggered on PR and push to main:
@@ -747,6 +749,8 @@ Dependencies: SPEC-13. The student creates the Google Cloud project, billing and
 Acceptance: /health answers; the reference matrix and the review pages render at the public URL; no key is present in the image or the service configuration; the README records both project IDs, the service URL and the teardown steps, and says that review decisions on the public demo are anonymous and do not survive the instance stopping.
 
 Evidence: service URL, the deploy log, a screenshot of the budget alert.
+
+Scope note, 28 September 2026 (`research/decisions.md`): the student deploys from Cloud Shell with `deploy/deploy.sh`. On the public demo the reference run is read-only, enforced on the server; decisions are accepted, into the instance's temporary storage, only on a visitor's own run of a corpus document, which the new-run form now offers by name. The image switches offline mode and the demo on itself, and CI builds and smoke-tests it without ever deploying.
 
 ### M3 (≈ G4), due 4 October — outcome level only
 
