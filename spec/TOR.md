@@ -1,7 +1,7 @@
 # SpecTrace — Terms of Reference (ТЗ)
 
 **Document status:** Draft, derived from `BLUEPRINT.md` — ready for technical review
-**Version:** 1.5
+**Version:** 1.6
 **Course:** EHU AI-Native Engineering Practice 2026 — LAB 04 Applied Intelligent Systems
 **Related documents:** `BLUEPRINT.md` (principles and scope, authoritative), `research/decisions.md` (engineering choices and their reasoning — the *why* behind the requirements below), `IMPLEMENTATION_PLAN.md` (detailed engineering design, prompts, and task sequence)
 **Approved by / date / version:** *(fill in once the supervisor signs off — the methodology requires the TOR agreed and saved with a version, same as the blueprint)*
@@ -30,6 +30,7 @@ Requirements are numbered so each one traces to the milestone that demonstrates 
 | 1.3 | 27 September 2026 | §12: the open item on the second document is closed. The second, less-known document is RFC 10050, Protocol-Specific Profiles for JSContact (September 2026), and §11 names it. | SPEC-10 needed the document to run the pipeline, the baseline and the chat arm on it. RFC 10050 was chosen from three candidates (RFC 10050, RFC 10031, RFC 10022): recent Standards Track RFCs of a size close to RFC 6902 that revise or update no other RFC. It was published after the knowledge cutoff of the pipeline's model (March 2026), although its Internet-Drafts were public from February 2025. Like RFC 6902, it is subject to BCP 78 and the IETF Trust Legal Provisions, whose section 3.c.i allows copying it in full and without modification; the source, size, SHA-256 and licence are recorded in `corpus/SOURCES.md` in `spectrace-dev`. A same-principle refinement under §13(b). No principle in `BLUEPRINT.md` §9 changes. |
 | 1.4 | 27 September 2026 | §12: the open item on REQ-EXT-03's chunking trigger is closed. Measured under SPEC-12 on RFC 6902, the trigger does not fire: chunked extraction is not added, and single-request extraction stays, as REQ-EXT-03 says. | The rule, fixed before the measurement, was that chunking is needed if the pipeline's recall in the last third of the document is at least 20 percentage points below its recall in the first third. All 19 gold requirements sit in lines 184–422 of 1011, so the last third holds none and the rule cannot fire. That is an absence of evidence, not evidence that recall holds up late in a document: RFC 6902 is about 8k tokens, and the check cannot detect degradation late in a long document. The decision and its caveats are recorded in `experiments/chunking-decision.md` in `spectrace-dev`. REQ-EXT-03 itself does not change. `BLUEPRINT.md` §7 still lists chunking as an open question; it changes only with the supervisor's re-approval. A same-principle refinement under §13(b). No principle in `BLUEPRINT.md` §9 changes. |
 | 1.5 | 28 September 2026 | §8: the Web UI row names a run list with a new-run form, and a run overview that also shows a run in progress, besides the review and matrix pages. Starting a run from the UI runs the same pipeline as the CLI and is the UI's only path to the model. | On 27 September 2026 the student decided that the review UI can also start a run (SPEC-13). The decision, its boundaries and the risk it carries are recorded in `research/decisions.md`. Version 1.4 described three pages, and §13 treats silent divergence between this document and the shipped system as a defect. No requirement is added or removed. One `.txt` document per run (§2.1), no PDF or OCR input (§2.3), offline replay with no key (REQ-DEP-01) and the deployed UI in offline mode (§10) all still hold. A same-principle refinement under §13(b). No principle in `BLUEPRINT.md` §9 changes. |
+| 1.6 | 29 September 2026 | §10: the deployed review UI also runs a new document live, through the Gemini key made in the key project, which has no billing. The service reads the key from Secret Manager in the deployment project; it is never in the repository, the image or CI. Cached documents still replay with no call. §11 adds the risk this carries. | On 29 September 2026, after SPEC-14 deployed the UI offline, the student decided that the public service should run new documents too. The decision, its boundaries and the risks it accepts are recorded in `research/decisions.md`. REQ-DEP-01 (CI offline, with no key), REQ-DEP-02 (two projects, the key project without billing), NFR-05 and NFR-06 (no secret committed or required by CI) all still hold. Treated as a same-principle refinement under §13(b): no principle in `BLUEPRINT.md` §9 changes. `BLUEPRINT.md` §4 accepts the free tier's use of inputs "only because the input is a public specification", and on the public service nothing but the page's wording keeps uploads to public specifications. Whether §4 needs amending, with supervisor re-approval, is the student's call, and `research/decisions.md` records it as open. |
 
 ---
 
@@ -227,7 +228,7 @@ Full field-level definitions are frozen in `IMPLEMENTATION_PLAN.md` §6 and SHAL
 
 - Public repository, green CI, `AGENTS.md` present
 - `README.md` with one-command offline reproduction
-- Deployed review UI (offline mode, no key required)
+- Deployed review UI, public: it replays the committed cache with no key, and runs a new document live through the key project's Gemini key, read from Secret Manager in the deployment project, never from the repository, the image or CI
 - Gold standard, metrics output, error analysis document
 - `docs/limitations.md`, `docs/privacy-safety.md`, `docs/agent-worklog.md`
 - 5–7 minute demo ending on a gap the system found
@@ -240,6 +241,7 @@ Condensed; full treatment in `BLUEPRINT.md` §7 and `IMPLEMENTATION_PLAN.md` §1
 
 - Training-data contamination on the primary public document is assumed; a second, less-known document measures the gap: RFC 10050, Protocol-Specific Profiles for JSContact, published in September 2026.
 - Free-tier vendor quotas may change without notice; NFR-01's cache is the mitigation, not a workaround to remove later.
+- The deployed review UI runs new documents live for anyone with the link. Every visitor shares the key's daily request quota, and an upload is sent to the provider's free tier whatever it contains; only the page's wording asks for public specifications. A live run made there cannot be replayed from the repository, so it is a demonstration, never evidence. Recorded in `research/decisions.md`, 29 September 2026.
 - Single-annotator gold standard; no inter-annotator agreement figure will exist.
 - The illustrative arm (REQ-EXP-04) is not reproducible by construction and is reported as a demonstration with a verification figure attached, never as a controlled result. Extracting its claimed requirements from unstructured prose is manual work; budget for it.
 

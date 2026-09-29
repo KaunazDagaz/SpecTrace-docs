@@ -175,3 +175,100 @@ alert, and a budget alert only notifies; it does not stop spending.
 **Out of scope, unchanged.** Live model calls from the deployed app; a key in the image, the service
 configuration or Secret Manager; authentication; a custom domain; deploying from GitHub Actions; infrastructure
 as code; persistent storage for visitors' runs or decisions.
+
+*Superseded in part on 29 September 2026 by the entry below: the deployed app now makes live model calls, with
+the key read from Secret Manager.*
+
+---
+
+## 29 September 2026 — The public demo also runs new documents live (scope change after SPEC-14)
+
+**Decided by:** the student, on 29 September 2026, after SPEC-14 had deployed the review UI offline. The agent
+presented three options with their risks:
+
+- **A.** Keep the public service offline and run new documents locally. The agent recommended this one.
+- **B.** Add a second, private live service that only the student's Google account can open.
+- **C.** Make the public service live.
+
+The student chose C.
+
+**Decision.** The public service runs a document not in the committed cache live, on Gemini's free tier,
+through the Gemini key made in the key project. A document whose calls are in the cache still replays with no
+call.
+
+**Why.** The student wants a visitor to be able to try SpecTrace on a document of their own, not only on the
+corpus.
+
+**Boundaries.**
+
+- **The key's project still has no billing.** The key used is the AI Studio key of the key project, so every
+  call stays on that project's free tier. `deploy/deploy.sh` still stops before deploying anything if billing on
+  that project is enabled or cannot be read. A key made in the deployment project would bill from the first
+  token, and must never be made.
+- **The key reaches the service only as a Secret Manager reference.**
+  - The student stores it once as the secret `gemini-api-key` in the deployment project, reading it with
+    `read -rs` so that it is never echoed or kept in the shell history.
+  - `deploy/deploy.sh` grants the service's account read access to that one secret, and sets `GEMINI_API_KEY`
+    as a reference to its latest enabled version, pinned by number.
+  - It then checks that the service configuration holds exactly that reference and `SPECTRACE_OFFLINE=0`, no
+    plain variable and no volume.
+  - The key is never in the repository, the image, a build argument or CI (NFR-06). The agent never asks for,
+    receives or stores it.
+- **CI stays offline and keyless.** The image still defaults to offline, and CI tests that image. The deployed
+  service is the same image with offline mode turned off and the key added in its configuration.
+  `deploy/smoke-test.sh --live` proves the key works on the deployed service, with one small live run of about
+  two requests.
+- **The demo cannot claim what it is not.** The banner says whether the server runs offline or live. Live, it
+  says that uploads go to Gemini's free tier through the author's key, that inputs there may be used to improve
+  Google's models, and that every visitor shares one daily quota. It asks for public specifications only. The
+  server refuses to start live without a key.
+- **The reference run stays read-only on the server**, exactly as in SPEC-14.
+- **What bounds a visitor.**
+  - Every limit from SPEC-13 still applies: one run at a time, one plain-text file of at most 64 KiB, at most ten
+    requests a minute.
+  - The quota is the key project's free tier, so a visitor can use it up but cannot cause a charge on it.
+  - The service uses instance-based billing, so a live run keeps its CPU after the upload request returns. That
+    is charged for the instance's whole life, including up to 15 idle minutes, in the deployment project. The
+    budget alert watches it.
+- **A kill switch.** One `gcloud run services update` command, written in the README and printed by the deploy
+  script, removes the key reference and the offline override, without a rebuild. The image's default,
+  offline, then applies again.
+
+**Found while building it.** The run list said that, live with no key, "only documents already in the cache can
+run". The code does not do that. `LlmClientFactory` refuses a live client with no key, by a design that
+`OnlineWithNoKeyRefusesToStartRatherThanFailingOnTheFirstCall` pins, so even a fully cached document fails with
+"GEMINI_API_KEY is not set". The sentence now says what the code does, and a test pins both.
+
+**Risks accepted, not resolved.**
+
+- **The quota is shared by anyone with the link.** Four large uploads could use up a day's free requests, on the
+  day of the defense too. The kill switch and the key's settings in AI Studio are the remedies, applied by hand.
+- **Uploads are not restricted to public specifications.** A visitor can upload anything, and it is sent to a
+  free tier that may use inputs to improve Google's models. `BLUEPRINT.md` §4 accepts that use "only because the
+  input is a public specification", and §4 and §5 keep anything personal or belonging to an employer out of the
+  system. On the public service only the page's wording upholds either. Whether `BLUEPRINT.md` §4 needs
+  amending, and so the supervisor's re-approval, is left open for the student to decide.
+- **Live runs made on the service are not reproducible from the repository.** Their cache entries live only in
+  the instance, and are lost when it stops. They are demonstrations. Every committed result still comes from a
+  local run whose cache is committed (P5).
+- **The cost is no longer about zero.** Instance-based billing charges while an instance is up. Secret Manager
+  charges for stored versions and accesses; the agent could not load its pricing page, so no figure is given
+  here. The budget alert only notifies.
+
+**What this changes in other documents.**
+
+- `spec/TOR.md` 1.6:
+  - §10: the deployed review UI replays the cache with no key and runs new documents live through the key read
+    from Secret Manager;
+  - §11 adds the risk.
+
+  A same-principle refinement under §13(b). No principle in `BLUEPRINT.md` §9 changes.
+- `research/IMPLEMENTATION_PLAN.md` §10.2 gains a note pointing here. It supersedes "no API key is deployed" and
+  the SPEC-14 card's out-of-scope items "live model calls from the deployed app" and a key in the service
+  configuration or Secret Manager.
+- The SPEC-14 entry above: its boundaries "No key anywhere" and "The demo is offline or it does not start", and
+  its out-of-scope list, are superseded as described here. Its other boundaries still hold.
+
+**Out of scope, unchanged.** Authentication, accounts or a password on the service; a per-visitor or daily run
+cap in the application; a key made in the deployment project; deploying from GitHub Actions; persistent storage
+for visitors' runs, decisions or cache entries.

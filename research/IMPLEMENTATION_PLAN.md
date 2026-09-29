@@ -596,6 +596,8 @@ Deployed service runs in offline mode against the committed cache, so **no API k
 
 As built in SPEC-14 (`research/decisions.md`, 28 September 2026): region `europe-north1`, service-level maximum of one instance, and a deploy from source that also uses Cloud Build and a Cloud Storage bucket in the deployment project. The reference run is read-only on the public demo.
 
+Scope change, 29 September 2026 (`research/decisions.md`, TOR 1.6 §10): the deployed service also runs a new document live, through the key project's Gemini key read from Secret Manager in the deployment project, with instance-based billing. This supersedes "no API key is deployed" above. The key's project still has no billing, the key is never in the repository, the image or CI, and CI still tests the image offline with no key.
+
 ### 10.3 CI
 
 `.github/workflows/ci.yml`, triggered on PR and push to main:
