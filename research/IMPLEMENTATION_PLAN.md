@@ -941,7 +941,7 @@ State these in the report before the committee asks.
 
 **Equivalent-quote ambiguity.** A quote appearing twice in the document is genuinely ambiguous without chunk context. Currently routed to the human queue; count how often it happens.
 
-**Free-tier data handling.** On the Gemini free tier, inputs and outputs may be used to improve the provider's models. Acceptable here because the corpus is a public RFC, and stated explicitly in `docs/privacy-safety.md`. It would not be acceptable for a private specification, which is itself a finding worth reporting.
+**Free-tier data handling.** On unpaid quota, the Gemini API Additional Terms let Google use inputs and outputs to improve its products, except when the developer is in the European Economic Area, Switzerland or the United Kingdom: the Paid Services data terms then apply, under which they are not used for that and are logged for a limited period to detect misuse. This project's developer is in the EEA, as the student confirmed on 1 October 2026. Either way, a private specification does not belong in the system: `BLUEPRINT.md` §4–§5 keep anything personal or belonging to an employer out, whatever the provider does with it. `docs/privacy-safety.md` quotes the terms and says where each kind of run sends a document.
 
 **Vendor quota volatility.** Free-tier limits change without notice. The cache makes the project immune to this after the first run — a design property worth stating as a result rather than a workaround.
 

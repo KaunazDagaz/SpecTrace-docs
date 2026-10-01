@@ -87,6 +87,10 @@ this. The form states it and asks for public specifications only; nothing else e
 model calls from the deployed app, PDF, Word or HTML input, generating cases for a single requirement from the
 review page, and several runs at once.
 
+*Superseded in part on 1 October 2026 by the entry of that date: for this project's key the Paid Services data terms
+apply, so inputs are not used to improve the provider's models, and the risk recorded above does not hold as
+written.*
+
 ---
 
 ## 28 September 2026 — The review UI as a public, offline demo (SPEC-14)
@@ -272,3 +276,89 @@ run". The code does not do that. `LlmClientFactory` refuses a live client with n
 **Out of scope, unchanged.** Authentication, accounts or a password on the service; a per-visitor or daily run
 cap in the application; a key made in the deployment project; deploying from GitHub Actions; persistent storage
 for visitors' runs, decisions or cache entries.
+
+*Superseded in part on 1 October 2026 by the entry below: for this project's key the Paid Services data terms apply,
+so the banner's sentence and the risk above that say inputs may be used to improve Google's models do not hold as
+written.*
+
+---
+
+## 1 October 2026 — The public demo stays live on unpaid quota, against the Gemini API Use Restriction
+
+**Decided by:** the student, on 1 October 2026, after the M2 acceptance note quoted the restriction below (Status,
+decision 1).
+
+**The restriction.** The [Gemini API Additional Terms](https://ai.google.dev/gemini-api/terms), "Last updated
+2026-04-28 UTC", read again on 1 October 2026 at 14:31 UTC. Their section "Use Restrictions" opens:
+
+> "Use of Google AI Studio and Gemini API is for developers building with Google AI models for professional or
+> business purposes, not for consumer use."
+
+Two sentences later it says:
+
+> "You may use only Paid Services when making API Clients available to users in the European Economic Area,
+> Switzerland, or the United Kingdom."
+
+The public service is open to anyone, users in the EEA included. It calls the Gemini API with the AI Studio key of
+the key project, which has no billing by design (REQ-DEP-02, Implementation Plan §10.2), and the same terms say:
+
+> "Your access to Gemini API is a "Paid Service" only when accessing the API through a Cloud Project associated with
+> an active billing account."
+
+So its calls run on unpaid quota. No legal reading is given here.
+
+**Options**, as the M2 acceptance note listed them:
+
+- **(a) Switch the service back to offline now**, with the README's kill switch and no rebuild. `deploy/deploy.sh`
+  must then not be run again as it stands, because it always deploys live. The agent recommended this one.
+- **(b) Keep the service live on Paid Services**, by enabling billing on the key project. That ends the free tier the
+  project is built around (`BLUEPRINT.md` §8, Implementation Plan §10.2), bills every call, and needs a TOR revision
+  and the supervisor's re-approval of `BLUEPRINT.md` §8.
+- **(c) Keep it as it is.**
+
+**Decision.** (c): the public service keeps running a document that is not in the committed cache live, on the key
+project's unpaid quota.
+
+**Why.** To show the system working on new documents, not only on documents whose answers are already recorded.
+
+**What the decision accepts.** On the quoted text, the service runs against the restriction. The risks the entry of
+29 September accepted still hold: one daily quota shared by anyone with the link, uploads that only the page's wording
+keeps to public specifications, live runs that cannot be replayed from the repository, and a cost that is no longer
+about zero.
+
+**What the same terms say about data use.** Under "Unpaid Services", Google uses what is sent "to provide, improve,
+and develop Google products and services and machine learning technologies", and then:
+
+> "If you're in the European Economic Area, Switzerland, or the United Kingdom, the terms under "How Google uses Your
+> Data" in "Paid Services" apply to all Services, including Google AI Studio and unpaid quota in the Gemini API, even
+> though they are offered free of charge."
+
+Under "Paid Services", Google "doesn't use your prompts (…) or responses to improve our products", and "logs prompts
+and responses for a limited period of time, solely for detecting and preventing violations of the Prohibited Use
+Policy to maintain the safety and security of the Services, and any required legal or regulatory disclosures." The
+developer who holds the key is in the EEA, as the student confirmed on 1 October 2026, so what the service sends
+through this key is not used to improve Google's products. The entries of 27 and 29 September, the banner, the run
+list and the README said otherwise, and are corrected as listed below.
+
+**The way back.** The README's kill switch turns the service offline at once, without a rebuild:
+`gcloud run services update spectrace --project spectrace-deploy --region europe-north1 --remove-env-vars SPECTRACE_OFFLINE --remove-secrets GEMINI_API_KEY --cpu-throttling`.
+The image's own `SPECTRACE_OFFLINE=1` then applies again. `deploy/deploy.sh` always deploys live: it sets
+`SPECTRACE_OFFLINE=0` and the key's secret reference, so after the kill switch it is not run again unless a new
+decision makes the service live again. Deleting or restricting the key in AI Studio stops live runs as well. The
+README's teardown steps end the service after the defense.
+
+**What this changes in other documents.**
+
+- `spec/TOR.md` 1.7: §11 names the restriction and this decision; §12 closes its open item on the provider's
+  data-use policy and the primary document's redistribution terms. A same-principle refinement under §13(b).
+- `docs/privacy-safety.md`, new: what a run sends to the model, where it goes, what the terms say happens to it, and
+  what is kept.
+- `research/IMPLEMENTATION_PLAN.md` §14, "Free-tier data handling", says what the terms say for this key.
+- In `spectrace-dev`: the banner and the run list's live notice, each pinned by a test, and the README, which also
+  names the restriction and links this entry.
+- `BLUEPRINT.md` §4's caveat and §7's open question are to change in version 1.2, for the supervisor's re-approval
+  (SPEC-19).
+- The entries of 27 and 29 September above: superseded in part, where they say inputs may be used to improve the
+  provider's models.
+
+**Not decided here.** A legal reading of the terms; Paid Services; any change to what the service does.
