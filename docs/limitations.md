@@ -9,7 +9,10 @@ holds its figure.
   ([`headline.md`][headline]). On RFC 10050 the arms differ by one or two claims, which a second run could change.
 - **The gold standard:** 19 requirements in one document, annotated by one person, so there is no inter-annotator
   agreement figure ([`rfc6902.quality.md`][quality]; [`spec/TOR.md`][tor] §11).
-- **The review:** one reviewer, who is also the author, on one document ([`experiments/review/`][review]).
+- **The review:** one reviewer, who is also the author, on one document. 21 of its 23 case decisions and 3 of its 4
+  queue decisions were made with the coding agent's opinion on each, at the reviewer's request, and each equals that
+  opinion. So the counts are not an independent human judgment ([`experiments/review/`][review];
+  [`error-analysis.md`][ea] §9).
 - **Confidence intervals:** none were computed.
 
 ## One model, one provider
