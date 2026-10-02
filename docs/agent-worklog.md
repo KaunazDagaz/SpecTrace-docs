@@ -33,7 +33,8 @@ shows each one. The agent drafted this page from that record.
 | M3 | The M3 plan; the agent rules applied | docs [#11][s11], [#12][s12]; dev [#19][d19] |
 | M3 | SPEC-15: the demonstration script and the slides, drafted for the student | docs [#13][s13] |
 | M3 | SPEC-16: the decision on the live service, the privacy page, the corrected banner | dev [#20][d20]; docs [#14][s14] |
-| M3 | SPEC-17: this page, [`limitations.md`][limitations], the README and the report it is translated into | this pull request |
+| M3 | SPEC-17: this page, [`limitations.md`][limitations], the README and the report it is translated into | dev [#21][d21]; docs [#15][s15] |
+| M3 | SPEC-18: the student's review committed, with its counts and error analysis §9. At the student's request, the agent first gave an opinion on each case and queue item, and the text of each edit. | this pull request |
 
 ## What the student decided
 
@@ -54,7 +55,9 @@ Each item links the record that shows it.
   annotator field).
 - **The chat transcripts:** captured by the student from the chat interface (`experiments/a0/`).
 - **The review decisions on the reference run:** in its log, under the student's self-declared name
-  (`experiments/review/`).
+  (`experiments/review/`). For 21 cases and 3 queue items, the student first asked the agent for an opinion on each.
+  The student entered every decision, and each equals the agent's opinion (`experiments/error-analysis.md` §9 in
+  `spectrace-dev`).
 - **The course format, the live document for the demonstration, and the approval of the nine agent-rules changes:**
   answers of 1 October 2026 ([plan][plan] §12).
 
@@ -111,6 +114,7 @@ Each item links the record that shows it.
 [d18]: https://github.com/KaunazDagaz/SpecTrace-dev/pull/18
 [d19]: https://github.com/KaunazDagaz/SpecTrace-dev/pull/19
 [d20]: https://github.com/KaunazDagaz/SpecTrace-dev/pull/20
+[d21]: https://github.com/KaunazDagaz/SpecTrace-dev/pull/21
 [s1]: https://github.com/KaunazDagaz/SpecTrace-docs/pull/1
 [s2]: https://github.com/KaunazDagaz/SpecTrace-docs/pull/2
 [s3]: https://github.com/KaunazDagaz/SpecTrace-docs/pull/3
@@ -125,3 +129,4 @@ Each item links the record that shows it.
 [s12]: https://github.com/KaunazDagaz/SpecTrace-docs/pull/12
 [s13]: https://github.com/KaunazDagaz/SpecTrace-docs/pull/13
 [s14]: https://github.com/KaunazDagaz/SpecTrace-docs/pull/14
+[s15]: https://github.com/KaunazDagaz/SpecTrace-docs/pull/15

@@ -70,9 +70,10 @@ Each figure is in the linked file, which anyone can regenerate with one command.
   read two ways. 19 gold
   requirements, one annotator: [`experiments/headline.md`][headline], [`experiments/error-analysis.md`][ea] §3.
 - **How often a reviewer kept the proposals.** This is how the project measures whether its test cases help: how many
-  a reviewer accepts as proposed, edits or rejects ([`BLUEPRINT.md`][blueprint] §6). The committed review decides 2
-  of 23 cases, 1 accepted and 1 rejected. The full walkthrough is in progress (SPEC-18). One reviewer, who is also the
-  author, on one document: [`experiments/review/`][outcomes].
+  a reviewer accepts as proposed, edits or rejects ([`BLUEPRINT.md`][blueprint] §6). On the reference run, 11 of 23
+  cases were accepted as proposed, 9 edited and 3 rejected. There was one reviewer, who is also the author, on one
+  document. 21 of the 23 decisions were made with the coding agent's opinion on each case, at the reviewer's request:
+  [`experiments/review/`][outcomes], [`experiments/error-analysis.md`][ea] §9.
 - **Anyone can repeat it.** One command replays the reference run offline, with no key.
   - CI runs that command on Linux and Windows on every push, and compares every file byte for byte except the run's
     start time and commit hash.
@@ -90,7 +91,7 @@ The acceptance notes check every criterion against evidence re-run on the accept
   - **Met:** the measured comparison, and the public URL.
   - **Met as a capability:** the review.
   - **Partly met:**
-    - the walkthrough of the full reference review, 2 of 23 cases, which M3 completes (SPEC-18);
+    - the walkthrough of the full reference review, 2 of 23 cases at M2, since completed in M3 (SPEC-18);
     - the budget alert, since confirmed by the student (SPEC-16);
     - several evidence records, such as PR descriptions.
   - **Not verified:** two process criteria of SPEC-10.
