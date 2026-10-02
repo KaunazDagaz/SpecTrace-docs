@@ -9,6 +9,31 @@ not by section numbers, so that no entry is mistaken for one of those cited sect
 
 ---
 
+## 23 September 2026 — The pipeline's model is Gemini 3.5 Flash-Lite (recorded on 2 October 2026)
+
+**Made in:** `spectrace-dev` PR #5, which the student merged on 23 September 2026, outside any card. The M1 and M2
+acceptance notes found the change recorded only in that PR and in the M1 note, so it is recorded here after the
+fact, from PR #5.
+
+**Decision.** The pipeline calls `gemini-3.5-flash-lite` instead of Gemini 3.5 Flash, the model that `BLUEPRINT.md`
+§8 and Implementation Plan §4.5 name.
+
+**Why.** On 23 September 2026 the 3.5 Flash free tier gave the project 20 requests a day, less than one full run, so
+NFR-07 (a full run within free-tier limits) did not hold. 3.5 Flash-Lite gave 500 requests a day. Its model id was
+taken from the provider's models page, where it was listed as Stable.
+
+**Alternatives on record.** PR #5 names no other model it considered. Before the project started, `BLUEPRINT.md` §8
+compared Gemini with OpenAI and Anthropic for the provider and chose Gemini for its free tier.
+
+**What it costs.** The extraction was recorded again on the new model; the 3.5 Flash cache entry stays, since the
+model id is part of its key. Every figure in `spectrace-dev` is for Flash-Lite alone, so whether a cheap model with
+strict verification can match an expensive one (Implementation Plan §8.1, §15) stays open.
+
+**What this changes in other documents.** `BLUEPRINT.md` §8's provider row and Implementation Plan §4.5 are to name
+the model, with this reason (SPEC-19).
+
+---
+
 ## 27 September 2026 — The review UI can also start a run (SPEC-13)
 
 **Decided by:** the student, on 27 September 2026, as a scope change to SPEC-13.
