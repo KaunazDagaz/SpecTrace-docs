@@ -40,7 +40,7 @@ the evidence, are under [Key decisions](#key-decisions).
 |---|---|---|
 | M1 | One document in, and out come a verified register, traceable test cases and a matrix with visible gaps. The run replays offline in CI with no key. | Accepted on 26 September 2026, tagged `m1-accepted` in [`spectrace-dev`][t-m1-dev] and [SpecTrace-docs][t-m1-docs] |
 | M2 | A reviewer accepts, edits or rejects each case, and every decision is kept. Measured comparisons with unverified approaches on two documents. The review UI at a public URL. | Accepted on 1 October 2026, tagged `m2-accepted` in [`spectrace-dev`][t-m2-dev] and [SpecTrace-docs][t-m2-docs] |
-| M3 | These documents, the decision on the live service, and the 5–7 minute demonstration | Done on 3 October 2026 |
+| M3 | These documents, the decision on the live service, and the 5–7 minute demonstration | Done on 3 October 2026, tagged `defense` in [`spectrace-dev`][t-def-dev] and [SpecTrace-docs][t-def-docs] |
 
 - **The system:** a .NET pipeline and command line, and a server-rendered review UI. It runs publicly at
   [spectrace-5zrm6uxcja-lz.a.run.app][live], where corpus documents replay from the committed cache and a new
@@ -114,7 +114,7 @@ Those limits are stated in [`docs/limitations.md`][limitations], not hidden.
 With Git and the .NET SDK 10.0, no key, and network only for the clone and the package restore:
 
 ```
-git clone https://github.com/KaunazDagaz/SpecTrace-dev.git
+git clone --branch defense https://github.com/KaunazDagaz/SpecTrace-dev.git
 cd SpecTrace-dev
 dotnet run --project src/SpecTrace.Cli -- run --document corpus/rfc6902.txt --offline --out runs/reference
 git status
@@ -138,18 +138,20 @@ the review UI and the experiment are in [spectrace-dev's README][dev-readme].
 | The review UI can start a run | Runs from the command line only | Review and the demonstration need a person reviewing a real run in the browser | Kept |
 
 [dev]: https://github.com/KaunazDagaz/SpecTrace-dev
-[dev-readme]: https://github.com/KaunazDagaz/SpecTrace-dev#reproduce
+[dev-readme]: https://github.com/KaunazDagaz/SpecTrace-dev/tree/defense#reproduce
 [live]: https://spectrace-5zrm6uxcja-lz.a.run.app
 [actions]: https://github.com/KaunazDagaz/SpecTrace-dev/actions
-[headline]: https://github.com/KaunazDagaz/SpecTrace-dev/blob/main/experiments/headline.md
-[ea]: https://github.com/KaunazDagaz/SpecTrace-dev/blob/main/experiments/error-analysis.md
-[chunk]: https://github.com/KaunazDagaz/SpecTrace-dev/blob/main/experiments/chunking-decision.md
-[outcomes]: https://github.com/KaunazDagaz/SpecTrace-dev/tree/main/experiments/review
+[headline]: https://github.com/KaunazDagaz/SpecTrace-dev/blob/defense/experiments/headline.md
+[ea]: https://github.com/KaunazDagaz/SpecTrace-dev/blob/defense/experiments/error-analysis.md
+[chunk]: https://github.com/KaunazDagaz/SpecTrace-dev/blob/defense/experiments/chunking-decision.md
+[outcomes]: https://github.com/KaunazDagaz/SpecTrace-dev/tree/defense/experiments/review
 [t-m1-dev]: https://github.com/KaunazDagaz/SpecTrace-dev/tree/m1-accepted
 [t-m1-docs]: https://github.com/KaunazDagaz/SpecTrace-docs/tree/m1-accepted
 [t-m2-dev]: https://github.com/KaunazDagaz/SpecTrace-dev/tree/m2-accepted
 [t-m2-docs]: https://github.com/KaunazDagaz/SpecTrace-docs/tree/m2-accepted
-[factory]: https://github.com/KaunazDagaz/SpecTrace-dev/blob/main/src/SpecTrace.Pipeline/LlmClientFactory.cs
+[t-def-dev]: https://github.com/KaunazDagaz/SpecTrace-dev/tree/defense
+[t-def-docs]: https://github.com/KaunazDagaz/SpecTrace-docs/tree/defense
+[factory]: https://github.com/KaunazDagaz/SpecTrace-dev/blob/defense/src/SpecTrace.Pipeline/LlmClientFactory.cs
 [limitations]: docs/limitations.md
 [privacy]: docs/privacy-safety.md
 [worklog]: docs/agent-worklog.md

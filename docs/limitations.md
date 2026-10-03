@@ -75,13 +75,13 @@ ordinary prose ([plan][plan] §14).
   keeps uploads to public specifications, its live runs cannot be replayed from the repository, and it runs against
   a use restriction in the provider's terms ([`docs/privacy-safety.md`][privacy]).
 
-[headline]: https://github.com/KaunazDagaz/SpecTrace-dev/blob/main/experiments/headline.md
-[quality]: https://github.com/KaunazDagaz/SpecTrace-dev/blob/main/experiments/rfc6902.quality.md
-[ea]: https://github.com/KaunazDagaz/SpecTrace-dev/blob/main/experiments/error-analysis.md
-[chunk]: https://github.com/KaunazDagaz/SpecTrace-dev/blob/main/experiments/chunking-decision.md
-[review]: https://github.com/KaunazDagaz/SpecTrace-dev/tree/main/experiments/review
-[factory]: https://github.com/KaunazDagaz/SpecTrace-dev/blob/main/src/SpecTrace.Pipeline/LlmClientFactory.cs
-[sources]: https://github.com/KaunazDagaz/SpecTrace-dev/blob/main/corpus/SOURCES.md
+[headline]: https://github.com/KaunazDagaz/SpecTrace-dev/blob/defense/experiments/headline.md
+[quality]: https://github.com/KaunazDagaz/SpecTrace-dev/blob/defense/experiments/rfc6902.quality.md
+[ea]: https://github.com/KaunazDagaz/SpecTrace-dev/blob/defense/experiments/error-analysis.md
+[chunk]: https://github.com/KaunazDagaz/SpecTrace-dev/blob/defense/experiments/chunking-decision.md
+[review]: https://github.com/KaunazDagaz/SpecTrace-dev/tree/defense/experiments/review
+[factory]: https://github.com/KaunazDagaz/SpecTrace-dev/blob/defense/src/SpecTrace.Pipeline/LlmClientFactory.cs
+[sources]: https://github.com/KaunazDagaz/SpecTrace-dev/blob/defense/corpus/SOURCES.md
 [readme-review]: https://github.com/KaunazDagaz/SpecTrace-dev#review-ui
 [blueprint]: ../BLUEPRINT.md
 [tor]: ../spec/TOR.md

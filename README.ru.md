@@ -41,7 +41,7 @@ SpecTrace извлекает нормативные требования из т
 |---|---|---|
 | M1 | На входе один документ, на выходе — проверенный реестр, прослеживаемые тест-кейсы и матрица с видимыми пробелами. Прогон воспроизводится офлайн в CI без ключа. | Принята 26 сентября 2026 г., тег `m1-accepted` в [`spectrace-dev`][t-m1-dev] и [SpecTrace-docs][t-m1-docs] |
 | M2 | Рецензент принимает, правит или отклоняет каждый кейс, и каждое решение сохраняется. Измеренное сравнение с подходами без проверки на двух документах. Интерфейс рецензирования по публичному адресу. | Принята 1 октября 2026 г., тег `m2-accepted` в [`spectrace-dev`][t-m2-dev] и [SpecTrace-docs][t-m2-docs] |
-| M3 | Эти документы, решение о живом сервисе и демонстрация на 5–7 минут | Завершена 3 октября 2026 г. |
+| M3 | Эти документы, решение о живом сервисе и демонстрация на 5–7 минут | Завершена 3 октября 2026 г., тег `defense` в [`spectrace-dev`][t-def-dev] и [SpecTrace-docs][t-def-docs] |
 
 - **Система:** конвейер и командная строка на .NET и интерфейс рецензирования с серверным рендерингом. Она работает
   публично по адресу [spectrace-5zrm6uxcja-lz.a.run.app][live]: документы корпуса воспроизводятся из закоммиченного
@@ -116,7 +116,7 @@ M1 и M2 приняты после проверки, критерий за кр�
 Нужны Git и .NET SDK 10.0, ключ не нужен, сеть — только для клонирования и восстановления пакетов:
 
 ```
-git clone https://github.com/KaunazDagaz/SpecTrace-dev.git
+git clone --branch defense https://github.com/KaunazDagaz/SpecTrace-dev.git
 cd SpecTrace-dev
 dotnet run --project src/SpecTrace.Cli -- run --document corpus/rfc6902.txt --offline --out runs/reference
 git status
@@ -140,18 +140,20 @@ git status
 | Интерфейс рецензирования может запускать прогон | Прогоны только из командной строки | Для рецензирования и демонстрации нужен человек, который рецензирует настоящий прогон в браузере | Сохранено |
 
 [dev]: https://github.com/KaunazDagaz/SpecTrace-dev
-[dev-readme]: https://github.com/KaunazDagaz/SpecTrace-dev#reproduce
+[dev-readme]: https://github.com/KaunazDagaz/SpecTrace-dev/tree/defense#reproduce
 [live]: https://spectrace-5zrm6uxcja-lz.a.run.app
 [actions]: https://github.com/KaunazDagaz/SpecTrace-dev/actions
-[headline]: https://github.com/KaunazDagaz/SpecTrace-dev/blob/main/experiments/headline.md
-[ea]: https://github.com/KaunazDagaz/SpecTrace-dev/blob/main/experiments/error-analysis.md
-[chunk]: https://github.com/KaunazDagaz/SpecTrace-dev/blob/main/experiments/chunking-decision.md
-[outcomes]: https://github.com/KaunazDagaz/SpecTrace-dev/tree/main/experiments/review
+[headline]: https://github.com/KaunazDagaz/SpecTrace-dev/blob/defense/experiments/headline.md
+[ea]: https://github.com/KaunazDagaz/SpecTrace-dev/blob/defense/experiments/error-analysis.md
+[chunk]: https://github.com/KaunazDagaz/SpecTrace-dev/blob/defense/experiments/chunking-decision.md
+[outcomes]: https://github.com/KaunazDagaz/SpecTrace-dev/tree/defense/experiments/review
 [t-m1-dev]: https://github.com/KaunazDagaz/SpecTrace-dev/tree/m1-accepted
 [t-m1-docs]: https://github.com/KaunazDagaz/SpecTrace-docs/tree/m1-accepted
 [t-m2-dev]: https://github.com/KaunazDagaz/SpecTrace-dev/tree/m2-accepted
 [t-m2-docs]: https://github.com/KaunazDagaz/SpecTrace-docs/tree/m2-accepted
-[factory]: https://github.com/KaunazDagaz/SpecTrace-dev/blob/main/src/SpecTrace.Pipeline/LlmClientFactory.cs
+[t-def-dev]: https://github.com/KaunazDagaz/SpecTrace-dev/tree/defense
+[t-def-docs]: https://github.com/KaunazDagaz/SpecTrace-docs/tree/defense
+[factory]: https://github.com/KaunazDagaz/SpecTrace-dev/blob/defense/src/SpecTrace.Pipeline/LlmClientFactory.cs
 [limitations]: docs/limitations.md
 [privacy]: docs/privacy-safety.md
 [worklog]: docs/agent-worklog.md
