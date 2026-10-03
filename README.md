@@ -38,8 +38,8 @@ the evidence, are under [Key decisions](#key-decisions).
 
 | Milestone | Result | Status |
 |---|---|---|
-| M1 | One document in, and out come a verified register, traceable test cases and a matrix with visible gaps. The run replays offline in CI with no key. | Accepted on 26 September 2026, `spectrace-dev` [`a976ace`][c-m1] |
-| M2 | A reviewer accepts, edits or rejects each case, and every decision is kept. Measured comparisons with unverified approaches on two documents. The review UI at a public URL. | Accepted on 1 October 2026, `spectrace-dev` [`8c9bfcd`][c-m2], SpecTrace-docs [`57cbabd`][c-m2-docs] |
+| M1 | One document in, and out come a verified register, traceable test cases and a matrix with visible gaps. The run replays offline in CI with no key. | Accepted on 26 September 2026, tagged `m1-accepted` in [`spectrace-dev`][t-m1-dev] and [SpecTrace-docs][t-m1-docs] |
+| M2 | A reviewer accepts, edits or rejects each case, and every decision is kept. Measured comparisons with unverified approaches on two documents. The review UI at a public URL. | Accepted on 1 October 2026, tagged `m2-accepted` in [`spectrace-dev`][t-m2-dev] and [SpecTrace-docs][t-m2-docs] |
 | M3 | These documents, the decision on the live service, and the 5–7 minute demonstration | Done on 3 October 2026 |
 
 - **The system:** a .NET pipeline and command line, and a server-rendered review UI. It runs publicly at
@@ -106,6 +106,8 @@ Those limits are stated in [`docs/limitations.md`][limitations], not hidden.
 - [`docs/limitations.md`][limitations] says what these results allow the project to claim and what they do not.
 - [`docs/privacy-safety.md`][privacy] says what a run sends to the model and where. It also covers the use
   restriction the public service runs against.
+- NFR-04 is not met: the provider and the model are constants in [`LlmClientFactory.cs`][factory], so another
+  provider or model is a code change, not a configuration change.
 
 ## How to rerun it
 
@@ -143,9 +145,11 @@ the review UI and the experiment are in [spectrace-dev's README][dev-readme].
 [ea]: https://github.com/KaunazDagaz/SpecTrace-dev/blob/main/experiments/error-analysis.md
 [chunk]: https://github.com/KaunazDagaz/SpecTrace-dev/blob/main/experiments/chunking-decision.md
 [outcomes]: https://github.com/KaunazDagaz/SpecTrace-dev/tree/main/experiments/review
-[c-m1]: https://github.com/KaunazDagaz/SpecTrace-dev/commit/a976acee87b3cd1ecf02bb8788e8d1179ceef85c
-[c-m2]: https://github.com/KaunazDagaz/SpecTrace-dev/commit/8c9bfcd9848a1416617dc51b32179491128983a2
-[c-m2-docs]: https://github.com/KaunazDagaz/SpecTrace-docs/commit/57cbabd76f727717076223da40cd0b3d9b067ac2
+[t-m1-dev]: https://github.com/KaunazDagaz/SpecTrace-dev/tree/m1-accepted
+[t-m1-docs]: https://github.com/KaunazDagaz/SpecTrace-docs/tree/m1-accepted
+[t-m2-dev]: https://github.com/KaunazDagaz/SpecTrace-dev/tree/m2-accepted
+[t-m2-docs]: https://github.com/KaunazDagaz/SpecTrace-docs/tree/m2-accepted
+[factory]: https://github.com/KaunazDagaz/SpecTrace-dev/blob/main/src/SpecTrace.Pipeline/LlmClientFactory.cs
 [limitations]: docs/limitations.md
 [privacy]: docs/privacy-safety.md
 [worklog]: docs/agent-worklog.md

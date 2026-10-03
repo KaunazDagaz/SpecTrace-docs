@@ -39,8 +39,8 @@ SpecTrace извлекает нормативные требования из т
 
 | Веха | Результат | Статус |
 |---|---|---|
-| M1 | На входе один документ, на выходе — проверенный реестр, прослеживаемые тест-кейсы и матрица с видимыми пробелами. Прогон воспроизводится офлайн в CI без ключа. | Принята 26 сентября 2026 г., `spectrace-dev` [`a976ace`][c-m1] |
-| M2 | Рецензент принимает, правит или отклоняет каждый кейс, и каждое решение сохраняется. Измеренное сравнение с подходами без проверки на двух документах. Интерфейс рецензирования по публичному адресу. | Принята 1 октября 2026 г., `spectrace-dev` [`8c9bfcd`][c-m2], SpecTrace-docs [`57cbabd`][c-m2-docs] |
+| M1 | На входе один документ, на выходе — проверенный реестр, прослеживаемые тест-кейсы и матрица с видимыми пробелами. Прогон воспроизводится офлайн в CI без ключа. | Принята 26 сентября 2026 г., тег `m1-accepted` в [`spectrace-dev`][t-m1-dev] и [SpecTrace-docs][t-m1-docs] |
+| M2 | Рецензент принимает, правит или отклоняет каждый кейс, и каждое решение сохраняется. Измеренное сравнение с подходами без проверки на двух документах. Интерфейс рецензирования по публичному адресу. | Принята 1 октября 2026 г., тег `m2-accepted` в [`spectrace-dev`][t-m2-dev] и [SpecTrace-docs][t-m2-docs] |
 | M3 | Эти документы, решение о живом сервисе и демонстрация на 5–7 минут | Завершена 3 октября 2026 г. |
 
 - **Система:** конвейер и командная строка на .NET и интерфейс рецензирования с серверным рендерингом. Она работает
@@ -108,6 +108,8 @@ M1 и M2 приняты после проверки, критерий за кр�
 - [`docs/limitations.md`][limitations] — что эти результаты позволяют проекту утверждать, а что нет.
 - [`docs/privacy-safety.md`][privacy] — что прогон отправляет модели и куда. Там же — ограничение использования, вопреки
   которому работает публичный сервис.
+- NFR-04 не выполнено: провайдер и модель — константы в [`LlmClientFactory.cs`][factory], поэтому другой провайдер
+  или модель — это правка кода, а не настройки.
 
 ## Как повторить
 
@@ -145,9 +147,11 @@ git status
 [ea]: https://github.com/KaunazDagaz/SpecTrace-dev/blob/main/experiments/error-analysis.md
 [chunk]: https://github.com/KaunazDagaz/SpecTrace-dev/blob/main/experiments/chunking-decision.md
 [outcomes]: https://github.com/KaunazDagaz/SpecTrace-dev/tree/main/experiments/review
-[c-m1]: https://github.com/KaunazDagaz/SpecTrace-dev/commit/a976acee87b3cd1ecf02bb8788e8d1179ceef85c
-[c-m2]: https://github.com/KaunazDagaz/SpecTrace-dev/commit/8c9bfcd9848a1416617dc51b32179491128983a2
-[c-m2-docs]: https://github.com/KaunazDagaz/SpecTrace-docs/commit/57cbabd76f727717076223da40cd0b3d9b067ac2
+[t-m1-dev]: https://github.com/KaunazDagaz/SpecTrace-dev/tree/m1-accepted
+[t-m1-docs]: https://github.com/KaunazDagaz/SpecTrace-docs/tree/m1-accepted
+[t-m2-dev]: https://github.com/KaunazDagaz/SpecTrace-dev/tree/m2-accepted
+[t-m2-docs]: https://github.com/KaunazDagaz/SpecTrace-docs/tree/m2-accepted
+[factory]: https://github.com/KaunazDagaz/SpecTrace-dev/blob/main/src/SpecTrace.Pipeline/LlmClientFactory.cs
 [limitations]: docs/limitations.md
 [privacy]: docs/privacy-safety.md
 [worklog]: docs/agent-worklog.md

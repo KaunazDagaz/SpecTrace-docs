@@ -164,7 +164,7 @@ The `cache/` directory is committed to the repository.
 
 ### 4.5 The LLM provider is a parameter, not a decision
 
-One interface, ~15 lines. Default implementation targets Gemini Flash via the AI Studio free tier. Swapping providers must be a config change, not a refactor.
+One interface, ~15 lines. Default implementation targets `gemini-3.5-flash-lite` through the AI Studio key's free tier. It replaced Gemini 3.5 Flash on 23 September 2026, when Flash's free tier allowed 20 requests a day, less than one full run (NFR-07); Flash-Lite allowed 500 (`spectrace-dev` PR #5). Swapping providers must be a config change, not a refactor.
 
 ---
 
@@ -178,19 +178,21 @@ Two repositories, per the practice's own methodology — stated as a rule, not a
 
 ```
 spectrace-docs/
-├── README.md                 # map of documents: what's agreed, what's draft
-├── blueprint.md               # BLUEPRINT.md — current concept, versioned
+├── README.md                 # for a reader outside the project: what was built, why, what confirms it
+├── README.ru.md              # the same in Russian: the course report
+├── BLUEPRINT.md              # current concept, versioned
 ├── spec/
-│   └── tor.md                  # TOR.md — agreed requirements, versioned
+│   ├── TOR.md                # agreed requirements, versioned
+│   └── annotation-rules.md   # the gold standard's rules, frozen before annotation
 ├── research/
-│   ├── implementation-plan.md  # this document — engineering detail, not authoritative
-│   ├── architecture.md
+│   ├── IMPLEMENTATION_PLAN.md  # this document — engineering detail, not authoritative
+│   └── decisions.md          # the decisions and the reasons for them
+├── docs/
 │   ├── limitations.md
-│   └── privacy-safety.md
-├── decisions/
-│   └── agent-worklog.md        # what the coding agent did, what was rejected and why
-├── conversations/               # cleaned transcripts of blueprint/TOR discussions
-└── acceptance/                   # per-milestone acceptance reports
+│   ├── privacy-safety.md
+│   └── agent-worklog.md      # what the coding agent did, and what the student decided
+├── acceptance/               # per-milestone acceptance notes, in English and Russian
+└── defense/                  # the defense: the slides' source, the report and the slides as uploaded
 ```
 
 **`spectrace-dev/`** — implementation: how it works
@@ -220,7 +222,7 @@ spectrace-dev/
 └── .github/workflows/ci.yml
 ```
 
-Both repositories, and the Linear project, link to each other. They must never hold three different versions of the same requirement — `spectrace-dev` reads `tor.md` from `spectrace-docs`; it never keeps its own copy.
+Both repositories, and the Linear project, link to each other. They must never hold three different versions of the same requirement — `spectrace-dev` reads `TOR.md` from `spectrace-docs`; it never keeps its own copy.
 
 `SpecTrace.Core` must have no dependency on `SpecTrace.Llm`. Enforce with a test that inspects assembly references — this is the architectural boundary that keeps the verifiable part independent of the probabilistic part.
 
@@ -292,10 +294,26 @@ public sealed record TestCase(
     string Precondition,
     string Input,
     string ExpectedResult,
-    ReviewStatus Status,
-    ReviewRecord? Review);
+    ReviewStatus Status);
 
-public sealed record ReviewRecord(string Decision, string? Comment, DateTimeOffset At);
+public enum CaseDecision { Accept, Edit, Reject }
+public enum QueueDecision { Testable, NotTestable, Defer }
+
+public abstract record LoggedDecision(string RunId, string Author, DateTimeOffset At)
+{
+    public abstract string TargetId { get; }
+}
+
+public sealed record ReviewRecord(
+    string RunId, string TestCaseId, CaseDecision Decision, CaseEdit? Edit,
+    string Author, DateTimeOffset At) : LoggedDecision(RunId, Author, At);
+
+public sealed record CaseEdit(
+    string Title, CaseType Type, string Precondition, string Input, string ExpectedResult);
+
+public sealed record QueueResolution(
+    string RunId, string ItemId, string? RequirementId, QueueDecision Decision,
+    string Author, DateTimeOffset At) : LoggedDecision(RunId, Author, At);
 
 public sealed record MatrixRow(
     string RequirementId,
@@ -600,12 +618,16 @@ Scope change, 29 September 2026 (`research/decisions.md`, TOR 1.6 §10): the dep
 
 ### 10.3 CI
 
-`.github/workflows/ci.yml`, triggered on PR and push to main:
+`.github/workflows/ci.yml`, triggered on pull requests and on pushes to `main`. Two jobs:
 
-```
-dotnet restore → dotnet build --warnaserror → dotnet test
-→ offline end-to-end run → invariant checks → upload run artifacts
-```
+- `build-test-reproduce`, with `SPECTRACE_OFFLINE=1`, on `ubuntu-latest` and on `windows-latest`: restore, build with
+  `--warnaserror`, test, the README's Reproduce command, the headline, every metrics file and the quality reports
+  recomputed offline, a check that fails if anything under `experiments/` then differs from the committed files, the
+  regenerated run uploaded, and the gold standard's check.
+- `container`, on `ubuntu-latest`: builds the image Cloud Run deploys, fails if it holds an `.env` file or a model key
+  variable, starts it with no key, fails if the server runs as root, runs `deploy/smoke-test.sh`, fails if that changed
+  the reference review log, and compares the RFC 6902 run started through the form with `runs/reference/`, byte for
+  byte.
 
 No secrets. Public repository, so Actions minutes are free. If CI ever needs an API key, the caching design has been broken — fix the design, not the workflow.
 
@@ -688,7 +710,7 @@ Result: RFC 6902 has a gold standard written by the student under frozen rules, 
 
 Context: TOR §9; Implementation Plan §8.3; Blueprint §4, §6.
 
-In scope: annotation rules in spectrace-docs, written and frozen before annotation starts — what counts as one requirement, including whether a normative statement without a BCP 14 keyword counts; how a sentence with two obligations is split; whether RECOMMENDED counts as SHOULD; how a sentence that occurs more than once in the document is annotated; Implementation Plan §8.3 updated to the rules' location, in the same spectrace-docs PR; the gold file at corpus/gold/rfc6902.gold.json, naming the rules by their spectrace-docs commit SHA, each entry a verbatim quote with modality and testability and, where the rules need it, the section it sits in; a loader that resolves every quote through the existing resolver, restricted to the entry's section when the entry names one, and rejects the whole file if any quote is not found exactly once.
+In scope: annotation rules in spectrace-docs, written and frozen before annotation starts — what counts as one requirement, including whether a normative statement without a BCP 14 keyword counts; how a sentence with two obligations is split; whether RECOMMENDED counts as SHOULD; how a sentence that occurs more than once in the document is annotated; Implementation Plan §8.3 updated to the rules' location, in the same spectrace-docs PR; the gold file at corpus/gold/rfc6902.gold.yaml, naming the rules by their spectrace-docs commit SHA, each entry a verbatim quote with modality and testability and, where the rules need it, the section it sits in; a loader that resolves every quote through the existing resolver, restricted to the entry's section when the entry names one, and rejects the whole file if any quote is not found exactly once.
 
 Out of scope: metrics (SPEC-12); a gold standard for the second document; any change to how the pipeline resolves the model's quotes.
 
