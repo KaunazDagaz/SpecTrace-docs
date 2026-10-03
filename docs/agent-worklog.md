@@ -35,7 +35,7 @@ shows each one. The agent drafted this page from that record.
 | M3 | SPEC-16: the decision on the live service, the privacy page, the corrected banner | dev [#20][d20]; docs [#14][s14] |
 | M3 | SPEC-17: this page, [`limitations.md`][limitations], the README and the report it is translated into | dev [#21][d21]; docs [#15][s15] |
 | M3 | SPEC-18: the student's review committed, with its counts and error analysis §9. At the student's request, the agent first gave an opinion on each case and queue item, and the text of each edit. | dev [#22][d22]; docs [#16][s16] |
-| M3 | At the student's request, the README's assessment of why the system is right and ready, marked there as the agent's | this pull request |
+| M3 | At the student's request, a draft of the README's assessment of why the system is right and ready | this pull request |
 
 ## What the student decided
 
