@@ -34,7 +34,8 @@ shows each one. The agent drafted this page from that record.
 | M3 | SPEC-15: the demonstration script and the slides, drafted for the student | docs [#13][s13] |
 | M3 | SPEC-16: the decision on the live service, the privacy page, the corrected banner | dev [#20][d20]; docs [#14][s14] |
 | M3 | SPEC-17: this page, [`limitations.md`][limitations], the README and the report it is translated into | dev [#21][d21]; docs [#15][s15] |
-| M3 | SPEC-18: the student's review committed, with its counts and error analysis §9. At the student's request, the agent first gave an opinion on each case and queue item, and the text of each edit. | this pull request |
+| M3 | SPEC-18: the student's review committed, with its counts and error analysis §9. At the student's request, the agent first gave an opinion on each case and queue item, and the text of each edit. | dev [#22][d22]; docs [#16][s16] |
+| M3 | At the student's request, a draft of the README's assessment of why the system is right and ready | this pull request |
 
 ## What the student decided
 
@@ -115,6 +116,7 @@ Each item links the record that shows it.
 [d19]: https://github.com/KaunazDagaz/SpecTrace-dev/pull/19
 [d20]: https://github.com/KaunazDagaz/SpecTrace-dev/pull/20
 [d21]: https://github.com/KaunazDagaz/SpecTrace-dev/pull/21
+[d22]: https://github.com/KaunazDagaz/SpecTrace-dev/pull/22
 [s1]: https://github.com/KaunazDagaz/SpecTrace-docs/pull/1
 [s2]: https://github.com/KaunazDagaz/SpecTrace-docs/pull/2
 [s3]: https://github.com/KaunazDagaz/SpecTrace-docs/pull/3
@@ -130,3 +132,4 @@ Each item links the record that shows it.
 [s13]: https://github.com/KaunazDagaz/SpecTrace-docs/pull/13
 [s14]: https://github.com/KaunazDagaz/SpecTrace-docs/pull/14
 [s15]: https://github.com/KaunazDagaz/SpecTrace-docs/pull/15
+[s16]: https://github.com/KaunazDagaz/SpecTrace-docs/pull/16
