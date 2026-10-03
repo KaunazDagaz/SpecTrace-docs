@@ -1,10 +1,10 @@
 # SpecTrace — Project Blueprint
 
-**Status:** Version 1.0 approved; version 1.1 awaiting supervisor re-approval
-**Version:** 1.1
+**Status:** Version 1.0 approved; versions 1.1 and 1.2 awaiting supervisor re-approval
+**Version:** 1.2
 **Course:** EHU AI-Native Engineering Practice 2026 — LAB 04 Applied Intelligent Systems
 **Author:** Mikita
-**Approved:** version 1.0 on 16 September 2026, by the practice supervisor *(date assumed as today — correct if the actual date differs)*. Version 1.1 is not yet approved.
+**Approved:** version 1.0 on 16 September 2026, by the practice supervisor *(date assumed as today — correct if the actual date differs)*. Versions 1.1 and 1.2 are not yet approved.
 
 ---
 
@@ -22,6 +22,7 @@ Two documents already exist downstream of this one — `TOR.md` (frozen, numbere
 |---|---|---|---|
 | 1.0 | 16 September 2026 | Approved. | — |
 | 1.1 | 26 September 2026 | §4: the size of the ground truth is set by the frozen annotation rules instead of being fixed at 30–50 requirements. | RFC 6902 carries a BCP 14 keyword in 18 sentences. Reaching 30 would mean counting statements the extraction prompt excludes, or padding the set to meet a number. `TOR.md` 1.2 §9 changes with it. No principle in §9 changes. Awaiting supervisor re-approval. |
+| 1.2 | 3 October 2026 | §4: the input's redistribution terms and the provider's data-use terms are confirmed, and the caveat says what the terms are. §7: the questions on those terms and on the choice of the second document are removed, the chunking question says what TOR 1.4 decided, and the memorization question names the second document. §8: the provider row names Gemini Flash-Lite, and the hosting row names instance-based billing. | The blueprint lagged the system (M2 acceptance note, divergences D3, D5 and D12). TOR 1.3 chose RFC 10050 as the second document, TOR 1.4 closed the chunking trigger, and TOR 1.7 closed the redistribution and data-use terms. Flash-Lite replaced Flash on 23 September 2026, when Flash's free tier allowed 20 requests a day, less than one full run. Since 29 September 2026 the service has been billed by instance time, so that a live run keeps its CPU after the upload request returns. No principle in §9 changes. Awaiting supervisor re-approval, together with 1.1. |
 
 ---
 
@@ -62,12 +63,12 @@ With this system: every requirement is anchored to an exact, checkable location 
 
 *Какие сведения нужны, откуда они берутся, кому доступны?*
 
-- **Input:** one public specification document. The working candidate is IETF RFC 6902 (JSON Patch) — precise, numbered, normatively dense, and small enough to fit whole in a single request. Exact redistribution terms are assumed permissive but not yet formally confirmed — see §7.
+- **Input:** one public specification document. The working candidate is IETF RFC 6902 (JSON Patch) — precise, numbered, normatively dense, and small enough to fit whole in a single request. Its redistribution terms are confirmed: the IETF Trust Legal Provisions 5.0, section 3.c.i, allow copying it in full and without modification (`corpus/SOURCES.md` in `spectrace-dev`).
 - **Ground truth:** a small hand-annotated set, built by the student directly from the same document under annotation rules frozen before annotation begins, holding every requirement those rules define. The first estimate was 30–50; RFC 6902 has fewer keyword-bearing sentences than that. Kept in the project's own documentation for scoring only.
 - **Generated data:** candidate requirements and test cases produced by the language model, cached to disk so nothing is requested twice.
 - **What never enters the system:** anything personal, and anything belonging to an employer — not as a default, as a hard boundary (§5).
 - **Access:** the whole project — code, cache, corpus, gold standard, run outputs — lives in a public repository. Nothing here is access-restricted, because nothing sensitive is ever admitted in the first place.
-- **One honest caveat:** on a free usage tier, submitted text may be used by the provider to improve its models. Acceptable only because the input is a public specification; would not be acceptable for a private document. Exact terms to confirm — see §7.
+- **One honest caveat:** on the provider's unpaid quota, submitted text is used to improve the provider's products, and people may read it. For a developer in the European Economic Area, Switzerland or the United Kingdom, the paid data terms apply instead: inputs are not used to improve products, and are logged for a limited period (Gemini API Additional Terms, last updated 2026-04-28, quoted in `docs/privacy-safety.md`). This project's developer is in the EEA. The input stays a public specification either way, because a run on another developer's key may fall under the unpaid terms; a private document would not be acceptable.
 
 ---
 
@@ -104,10 +105,8 @@ With this system: every requirement is anchored to an exact, checkable location 
 
 - We assume a tester actually wants this exact shape of output — a register, a matrix, a decision queue — rather than a direct export into whatever test-management tool they already use. Not checked against anyone but the student so far.
 - We assume normative language (MUST / SHOULD / MAY) reads closely enough to ordinary specifications that the result says something beyond this one document's style. Untested.
-- We do not yet know how much of the model's apparent success on the primary document is genuine reading versus memorized familiarity with a well-known public text. A second, less-known document is planned specifically to probe this; the result is not in yet.
-- Redistribution terms for the chosen document, and the provider's exact data-use policy on its free tier, are assumed acceptable but not yet formally confirmed.
-- Whether the document needs to be split into chunks for reliable extraction is genuinely unknown until the first real run.
-- Which second document will be used for the memorization check is not yet decided.
+- We do not yet know how much of the model's apparent success on the primary document is genuine reading versus memorized familiarity with a well-known public text. The second document, RFC 10050 (TOR 1.3), was published after the model's knowledge cutoff, although its drafts were public before it; what its results allow the project to claim is in `docs/limitations.md`.
+- Whether a long document needs to be split into chunks is still unknown. On RFC 6902 the rule fixed in advance cannot fire, so the whole document stays one request (TOR 1.4; `experiments/chunking-decision.md` in `spectrace-dev`).
 
 ---
 
@@ -118,8 +117,8 @@ The template's own later stage (Этап 03, "накопить облако зн
 | Question | Options considered | Chosen | Reason | Remaining risk |
 |---|---|---|---|---|
 | Runtime for the pipeline | Python (richer LLM tooling), .NET/C#, Node/TypeScript | .NET/C# | Matches the student's existing skill; produces a codebase directly reusable for a same-domain diploma; no new-tool overhead inside a short window | .NET's LLM-specific tooling is less mature than Python's — more of the provider client may need to be hand-written |
-| LLM provider for the pipeline | Gemini (free tier), OpenAI, Anthropic | Gemini Flash, behind a swappable interface | Zero marginal cost at this scale; context window comfortably fits the whole document in one request | Free-tier quotas and model availability can change without notice — mitigated by treating the provider as a parameter and caching every response, not by trusting the quota |
-| Where the review UI runs | Local only, Cloud Run, a third-party PaaS | Cloud Run, scale-to-zero | Free at this traffic level; the course toolchain already assumes Google Cloud | Enabling billing on the same project removes the Gemini free tier — the deployment project and the API-key project must stay separate, as a rule, not a reminder |
+| LLM provider for the pipeline | Gemini (free tier), OpenAI, Anthropic | Gemini Flash-Lite (`gemini-3.5-flash-lite`), behind a swappable interface | Zero marginal cost at this scale; context window comfortably fits the whole document in one request. Flash-Lite replaced Flash on 23 September 2026, when Flash's free tier allowed 20 requests a day, less than one full run; Flash-Lite allowed 500 | Free-tier quotas and model availability can change without notice — mitigated by treating the provider as a parameter and caching every response, not by trusting the quota |
+| Where the review UI runs | Local only, Cloud Run, a third-party PaaS | Cloud Run, scale to zero; instance-based billing since 29 September 2026 | The course toolchain already assumes Google Cloud. Billing by instance time lets a live run keep its CPU after the upload request returns, so the cost is no longer about zero; a budget alert watches it | Enabling billing on the same project removes the Gemini free tier — the deployment project and the API-key project must stay separate, as a rule, not a reminder |
 | How to stay reproducible without repeated cost | No caching, or content-addressed caching | Caching every LLM call by a hash of the full request, temperature 0 | Turns a cost-saving trick into the project's strongest reproducibility argument: the whole pipeline replays offline, with no key, indefinitely | Ordinary cache-invalidation care needed if a prompt changes; nothing else identified yet |
 
 ---
