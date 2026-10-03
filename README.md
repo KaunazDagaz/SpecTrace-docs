@@ -98,7 +98,26 @@ The acceptance notes check every criterion against evidence re-run on the accept
   - **Unmet requirement:** NFR-04, a provider swappable by configuration. The provider and the model are constants in
     code.
 
-*[The student's own statement of why they consider the system right and ready, in their words.]*
+*The agent's assessment, written at the student's request.*
+
+**Right, in the sense the project sets itself.**
+- Every requirement in the register is a verbatim quote that code located in the source.
+- Every test case names a requirement.
+- Every requirement without a test case stays a visible gap until a person decides otherwise.
+
+These properties hold by construction and are checked by tests and the invariants I1–I8 on every push. All 44 CI runs
+from 20 September to 2 October 2026 passed. The headline and quality figures are not asserted: one command
+regenerates them from the committed cache, and CI fails if one of them changes. Where the system could not decide —
+a quote found twice, a sentence read two ways, a requirement no case could be written for — it handed the question
+to a person instead of guessing.
+
+**Ready for what the course asks, and not more.** Someone outside the project can rerun it, read why each decision
+was made, and see it handle a document nobody recorded. But:
+- its quality is measured on one document, with one model and one annotator;
+- its review was decided by one person, with the agent's opinion in front of them;
+- as far as the record shows, no tester other than its author has used it.
+
+Those limits are stated in [`docs/limitations.md`][limitations], not hidden.
 
 ## Where it stops
 
