@@ -96,11 +96,11 @@ offline without a rebuild.
 [terms]: https://ai.google.dev/gemini-api/terms
 [blueprint]: ../BLUEPRINT.md
 [decision]: ../research/decisions.md
-[extractor]: https://github.com/KaunazDagaz/SpecTrace-dev/blob/main/src/SpecTrace.Pipeline/RequirementExtractor.cs
-[generator]: https://github.com/KaunazDagaz/SpecTrace-dev/blob/main/src/SpecTrace.Pipeline/TestCaseGenerator.cs
-[baseline]: https://github.com/KaunazDagaz/SpecTrace-dev/blob/main/src/SpecTrace.Pipeline/BaselineRun.cs
-[prompts]: https://github.com/KaunazDagaz/SpecTrace-dev/tree/main/src/SpecTrace.Pipeline/Prompts
-[sources]: https://github.com/KaunazDagaz/SpecTrace-dev/blob/main/corpus/SOURCES.md
+[extractor]: https://github.com/KaunazDagaz/SpecTrace-dev/blob/defense/src/SpecTrace.Pipeline/RequirementExtractor.cs
+[generator]: https://github.com/KaunazDagaz/SpecTrace-dev/blob/defense/src/SpecTrace.Pipeline/TestCaseGenerator.cs
+[baseline]: https://github.com/KaunazDagaz/SpecTrace-dev/blob/defense/src/SpecTrace.Pipeline/BaselineRun.cs
+[prompts]: https://github.com/KaunazDagaz/SpecTrace-dev/tree/defense/src/SpecTrace.Pipeline/Prompts
+[sources]: https://github.com/KaunazDagaz/SpecTrace-dev/blob/defense/corpus/SOURCES.md
 [readme-review]: https://github.com/KaunazDagaz/SpecTrace-dev#review-ui
 [readme-deployment]: https://github.com/KaunazDagaz/SpecTrace-dev#deployment
 [readme-deploy]: https://github.com/KaunazDagaz/SpecTrace-dev#deploy-redeploy-and-check
