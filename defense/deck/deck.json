@@ -3,10 +3,10 @@
   "createdOnFiles": {"v": 1, "at": "2026-10-01T13:43:34Z"},
   "lists": "css",
   "title": "SpecTrace — защита",
-  "order": ["cover", "approach", "evidence", "limits", "close"],
+  "order": ["cover", "approach", "evidence", "contribution", "limits", "close"],
   "sections": {
     "s1": {"description": "Проблема и подход, затем демонстрация", "start": "cover"},
-    "s2": {"description": "Что подтверждает результат и где его границы", "start": "evidence"},
+    "s2": {"description": "Три вывода, мой вклад и границы результата", "start": "evidence"},
     "s3": {"description": "Как проверить самостоятельно", "start": "close"}
   },
   "faces": {
