@@ -1,37 +1,28 @@
 <section id="evidence" data-transition="fade" style="background:#ECE9E1;color:#1B2433;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
-<h2 style="font-family:'IBM Plex Sans', Arial, sans-serif;font-size:64px;font-weight:600;line-height:1.15;color:#1B2433">Что подтверждает результат</h2>
+<h2 style="font-family:'IBM Plex Sans', Arial, sans-serif;font-size:64px;font-weight:600;line-height:1.15;color:#1B2433">Выводы — три отдельных измерения</h2>
 <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px">
 <div style="display:flex;flex-direction:column;gap:12px;background:#FDFCF9;padding:32px;border:1px solid #D9D5CA;border-radius:16px">
-<p style="font-size:56px;font-weight:700;line-height:1.1;color:#B4530F">81,3 %</p>
-<p style="font-size:24px;line-height:1.4;color:#2D3748">цитат наивного промпта нет в документе дословно; у конвейера 0,0 % — RFC 6902, та же модель и та же проверка</p>
-<p style="font-size:24px;color:#5A6472">experiments/headline.md</p>
+<h3 style="font-size:24px;font-weight:600;line-height:1.2;letter-spacing:2px;text-transform:uppercase;color:#B4530F">1 · Точность цитирования</h3>
+<p style="font-size:56px;font-weight:700;line-height:1.1;color:#B4530F">81,3 % → 0 %</p>
+<p style="font-size:24px;line-height:1.4;color:#2D3748">цитат не совпали с текстом дословно: наивный промпт — 13 из 16, конвейер — 0 из 18; RFC 6902, одна модель, один верификатор</p>
+<p style="font-size:24px;line-height:1.4;color:#1B2433"><b>Это несовпадение цитат, в основном из-за кавычек, а не доля выдуманных требований.</b> На RFC 10050 — 9,5 · 9,1 · 3,3 %</p>
+<p style="font-size:24px;color:#5A6472">headline.md · error-analysis.md §2</p>
 </div>
 <div style="display:flex;flex-direction:column;gap:12px;background:#FDFCF9;padding:32px;border:1px solid #D9D5CA;border-radius:16px">
-<p style="font-size:56px;font-weight:700;line-height:1.1;color:#1B2433">F1 77,4 %</p>
-<p style="font-size:24px;line-height:1.4;color:#2D3748">против эталона из 19 требований: точность 100 %, полнота 63,2 %</p>
-<p style="font-size:24px;color:#5A6472">experiments/headline.md</p>
+<h3 style="font-size:24px;font-weight:600;line-height:1.2;letter-spacing:2px;text-transform:uppercase;color:#1F5FAD">2 · Полнота извлечения</h3>
+<p style="font-size:56px;font-weight:700;line-height:1.1;color:#1F5FAD">63,2 %</p>
+<p style="font-size:24px;line-height:1.4;color:#2D3748">полнота итогового реестра: 12 из 19 эталонных требований при точности 100 %; до проверки — 94,7 %</p>
+<p style="font-size:24px;line-height:1.4;color:#1B2433"><b>6 требований ждут решения человека. Ноль ошибок цитирования не означает полного покрытия спецификации.</b></p>
+<p style="font-size:24px;color:#5A6472">headline.md · error-analysis.md §3</p>
 </div>
 <div style="display:flex;flex-direction:column;gap:12px;background:#FDFCF9;padding:32px;border:1px solid #D9D5CA;border-radius:16px">
-<p style="font-size:56px;font-weight:700;line-height:1.1;color:#1B2433">6 из 19</p>
-<p style="font-size:24px;line-height:1.4;color:#2D3748">требований ждут решения человека: цитата встречается дважды или прочитана двояко — до проверки полнота 94,7 %</p>
-<p style="font-size:24px;color:#5A6472">experiments/error-analysis.md §3</p>
-</div>
-<div style="display:flex;flex-direction:column;gap:12px;background:#FDFCF9;padding:32px;border:1px solid #D9D5CA;border-radius:16px">
-<p style="font-size:56px;font-weight:700;line-height:1.1;color:#1F5FAD">3,3 %</p>
-<p style="font-size:24px;line-height:1.4;color:#2D3748">цитат конвейера нет в RFC 10050, вышедшем после даты среза знаний модели; у наивного промпта 9,1 %, у чата 9,5 %</p>
-<p style="font-size:24px;color:#5A6472">experiments/headline.md</p>
-</div>
-<div style="display:flex;flex-direction:column;gap:12px;background:#FDFCF9;padding:32px;border:1px solid #D9D5CA;border-radius:16px">
+<h3 style="font-size:24px;font-weight:600;line-height:1.2;letter-spacing:2px;text-transform:uppercase;color:#1B2433">3 · Качество тест-кейсов</h3>
 <p style="font-size:56px;font-weight:700;line-height:1.1;color:#1B2433">11 · 9 · 3</p>
-<p style="font-size:24px;line-height:1.4;color:#2D3748">из 23 тест-кейсов приняты как есть, исправлены и отклонены; один рецензент — автор, 21 решение принято с мнением агента о каждом кейсе</p>
-<p style="font-size:24px;color:#5A6472">experiments/error-analysis.md §9</p>
-</div>
-<div style="display:flex;flex-direction:column;gap:12px;background:#FDFCF9;padding:32px;border:1px solid #D9D5CA;border-radius:16px">
-<p style="font-size:56px;font-weight:700;line-height:1.1;color:#1B2433">1 команда</p>
-<p style="font-size:24px;line-height:1.4;color:#2D3748">воспроизводит прогон офлайн, без ключа: файлы совпадают с закоммиченными, кроме времени запуска и коммита; CI — Linux и Windows</p>
-<p style="font-size:24px;color:#5A6472">README, раздел «Reproduce»</p>
+<p style="font-size:24px;line-height:1.4;color:#2D3748">из 23 тест-кейсов приняты как есть, исправлены и отклонены</p>
+<p style="font-size:24px;line-height:1.4;color:#1B2433"><b>Рецензент один — автор; 21 решение принято с подсказкой ИИ-агента. Это не независимая экспертная оценка.</b></p>
+<p style="font-size:24px;color:#5A6472">experiments/review/ · error-analysis.md §9</p>
 </div>
 </div>
-<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#5A6472">Все файлы — в репозитории SpecTrace-dev; каждая цифра пересчитывается командой из experiments/headline.md</p>
-<aside>Около минуты. Главное сравнение контролируемое: та же модель, та же температура, тот же верификатор. У наивного промпта 81,3 % цитат не находятся в документе дословно, у конвейера ноль. Почти все эти цитаты не выдуманы, а «причёсаны»: двойные кавычки заменены одинарными. Цена строгой проверки: 6 из 19 эталонных требований ждут человека, поэтому полнота 63,2 %, а не 94,7 %. На RFC 10050, который вышел после даты среза знаний модели, ветки близки. При полном просмотре из 23 кейсов 11 приняты как есть, 9 исправлены, 3 отклонены; 21 решение принято, когда передо мной было мнение агента о каждом кейсе, и это записано в анализе ошибок. Всё это пересчитывается одной командой, и CI падает, если цифры разойдутся с закоммиченными.</aside>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#5A6472">Каждая цифра пересчитывается одной командой из закэшированных ответов, без ключа; CI падает, если она разойдётся с закоммиченной</p>
+<aside>Около минуты. Три вывода — три разных измерения, я их не смешиваю. Первое — точность цитирования. В контролируемом сравнении на RFC 6902, одна модель и один верификатор, у наивного промпта 81,3 % цитат, 13 из 16, не совпадают с текстом дословно, у конвейера 0 из 18. Это несовпадение цитат, в основном из-за замены двойных кавычек одинарными, а не доля выдуманных требований: выдуманных не нашлось ни в одной ветке. На RFC 10050 ветки близки. Второе — полнота извлечения. Полнота итогового реестра — 63,2 %, 12 из 19 эталонных требований, при точности 100 %; до проверки было 94,7 %. Шесть требований ждут решения человека: четыре цитаты стоят в документе дважды, одно предложение прочитано двумя способами. Ноль ошибок цитирования не означает полного покрытия спецификации. Третье — качество тест-кейсов. Из 23 кейсов я принял 11 как есть, 9 исправил, 3 отклонил. Рецензент один — я, автор, и 21 решение я принимал с подсказкой ИИ-агента, поэтому это не независимая экспертная оценка. Каждая цифра пересчитывается одной командой без ключа.</aside>
 </section>

@@ -1,0 +1,30 @@
+<section id="contribution" data-transition="fade" style="background:#F6F5F1;color:#1B2433;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<h2 style="font-family:'IBM Plex Sans', Arial, sans-serif;font-size:64px;font-weight:600;line-height:1.15;color:#1B2433">Мой вклад и обоснование решений</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:32px">
+<div style="display:flex;flex-direction:column;gap:16px;background:#FDFCF9;padding:32px;border:1px solid #D9D5CA;border-radius:16px">
+<h3 style="font-size:30px;font-weight:600;line-height:1.2;color:#B4530F">Что сделал я</h3>
+<p style="font-size:24px;line-height:1.4;color:#5A6472">Код и большую часть документов написал ИИ-агент Claude Code — по моим задачам и правилам.</p>
+<ul style="font-size:24px;line-height:1.4;color:#1B2433">
+<li>замысел, рамки и семь принципов — Blueprint, одобрен 16 сентября</li>
+<li>задачи агенту по вехам, приёмка каждой вехи по критериям</li>
+<li>эталон: 19 требований по правилам, замороженным до разметки</li>
+<li>ответы чата для сравнения; выбор RFC 10050</li>
+<li>рецензия всех 23 кейсов и 4 вопросов очереди</li>
+<li>развёртывание стенда; 7 октября — перевод в офлайн</li>
+</ul>
+</div>
+<div style="display:flex;flex-direction:column;gap:16px;background:#FDFCF9;padding:32px;border:1px solid #D9D5CA;border-radius:16px">
+<h3 style="font-size:30px;font-weight:600;line-height:1.2;color:#1F5FAD">Решения и почему</h3>
+<ul style="font-size:24px;line-height:1.4;color:#1B2433">
+<li><b>Модель отдаёт только цитату, место находит код:</b> позицию можно проверить, смещение от модели — нет</li>
+<li><b>Цитаты нет — отбросить, найдена дважды — человеку:</b> система не угадывает</li>
+<li><b>Кэш каждого вызова, температура 0:</b> повтор без ключа, CI сравнивает побайтно</li>
+<li><b>Эталон по правилам, замороженным заранее:</b> 19 требований, без подгонки к 30–50</li>
+<li><b>Flash-Lite вместо Flash:</b> у Flash 20 запросов в день — меньше одного прогона</li>
+<li><b>.NET:</b> мой стек и задел для диплома</li>
+</ul>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#5A6472">SpecTrace-docs: docs/agent-worklog.md — кто что делал; research/decisions.md и README — решения с альтернативами</p>
+<aside>Около 45 секунд. Мой вклад — отдельно. Код и большую часть документов написал ИИ-агент Claude Code, по моим задачам и правилам. Моё: замысел, рамки и семь принципов, Blueprint одобрен 16 сентября; задачи агенту по вехам и приёмка каждой вехи по критериям; эталон — 19 требований я разметил сам, по правилам, замороженным до разметки; ответы чата для сравнения и выбор второго документа; рецензия всех кейсов; развёртывание стенда и 7 октября — перевод его в офлайн. Решения: место цитаты находит код, потому что позицию можно проверить, а смещение от модели нельзя; ненайденную цитату отбрасываем, найденную дважды отдаём человеку, потому что система не должна угадывать; каждый вызов кэшируется, чтобы прогон повторялся без ключа; размер эталона задали правила, а не цель в 30–50; Flash-Lite вместо Flash — из-за квоты; .NET — мой стек и задел для диплома.</aside>
+</section>
