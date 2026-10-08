@@ -20,8 +20,9 @@ holds its figure.
 - **The controlled arms:** every controlled arm used `gemini-3.5-flash-lite` at temperature 0 through the Gemini API.
 - **The chat arm:** it used the Gemini app, whose model version, system prompt and sampling are not disclosed. It was
   captured by hand and cannot be replayed ([`headline.md`][headline]).
-- **NFR-04 is unmet:** the provider and the model are constants in code ([`LlmClientFactory.cs`][factory]), so a
-  different provider is a code change, not a configuration change.
+- **NFR-04 is unmet:** the provider is a constant in code ([`LlmClientFactory.cs`][factory]) and only Gemini is
+  implemented, so a different provider is a code change, not a configuration change. Another Gemini model can be named
+  only on the command line, with `--model`.
 - **An open question:** whether a cheap model with strict verification beats an expensive one trusted without it
   ([plan][plan] §8.1, §15) is not answered here.
 
@@ -31,7 +32,7 @@ holds its figure.
   measured on it is an upper bound ([plan][plan] §14).
 - **RFC 10050 is the check on that.** It was published in September 2026, after the model's March 2026 knowledge
   cutoff, but its drafts were public from February 2025 ([`corpus/SOURCES.md`][sources]). On it the three arms lie
-  close together: chat 9.5%, naive prompt 9.1%, pipeline 3.3% of claims not located ([`headline.md`][headline]).
+  close together: chat 9.5%, simple prompt 9.1%, pipeline 3.3% of claims not located ([`headline.md`][headline]).
 
 ## What verification was not shown to do
 
@@ -41,7 +42,7 @@ holds its figure.
   failure [`BLUEPRINT.md`][blueprint] §1 describes.
 - **What it did show,** on RFC 6902: quotes that are not verbatim are refused, and sentences found twice or read two
   ways go to a person.
-- **The cost of that strictness.** It refuses a quote whose only fault is cosmetic. 12 of the naive prompt's 13
+- **The cost of that strictness.** It refuses a quote whose only fault is cosmetic. 12 of the simple prompt's 13
   unlocated quotes were within 0.90 similarity of the source, and they were its only way to 12 gold requirements
   ([`headline.md`][headline], the cost of verification).
 - **The pipeline's own register** holds back 6 of the 19 gold requirements for a person: recall 63.2% delivered,
@@ -71,9 +72,11 @@ ordinary prose ([plan][plan] §14).
   no register. The 6 held-back gold requirements stay held back ([README, Review UI][readme-review];
   [`error-analysis.md`][ea] §10).
 - **"Testable" generates nothing.** It is logged, but no test case is generated, so the requirement stays a gap.
-- **The public service** has no accounts and shares one daily quota among all visitors. Only the page's wording
-  keeps uploads to public specifications, its live runs cannot be replayed from the repository, and it runs against
-  a use restriction in the provider's terms ([`docs/privacy-safety.md`][privacy]).
+- **The public service** runs offline since 7 October 2026: it replays the corpus documents from the committed cache
+  and cannot run a new document, which needs a local run with a Gemini key of one's own. It has no accounts, and
+  only the page's wording keeps uploads to public specifications. From 29 September to 7 October 2026 it ran new
+  documents live, on unpaid quota, against a use restriction in the provider's terms
+  ([`docs/privacy-safety.md`][privacy]).
 
 [headline]: https://github.com/KaunazDagaz/SpecTrace-dev/blob/defense/experiments/headline.md
 [quality]: https://github.com/KaunazDagaz/SpecTrace-dev/blob/defense/experiments/rfc6902.quality.md

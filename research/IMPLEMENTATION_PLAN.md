@@ -192,7 +192,7 @@ spectrace-docs/
 │   ├── privacy-safety.md
 │   └── agent-worklog.md      # what the coding agent did, and what the student decided
 ├── acceptance/               # per-milestone acceptance notes, in English and Russian
-└── defense/                  # the defense: the slides' source, the report and the slides as uploaded
+└── defense/                  # the defense: the slides' source and PDF as presented, the report as uploaded
 ```
 
 **`spectrace-dev/`** — implementation: how it works
@@ -455,7 +455,7 @@ The honest framing matters more than the result. Arm B's unverifiable-claim rate
 
 > Strict quote verification drives unverifiable claims to zero. What does it cost in recall, and what is the exchange rate?
 
-Secondary question, once the provider is a parameter: **is a cheap model with strict validation better than an expensive model without it?** This is the "honest next question" the course asks for, and it is a defensible diploma continuation.
+Secondary question, once the provider is a parameter: **is a cheap model with strict validation better than an expensive model without it?** This is the "honest next question" the course asks for, and it is a defensible continuation of this work.
 
 ### 8.2 Arms
 
@@ -615,6 +615,8 @@ Deployed service runs in offline mode against the committed cache, so **no API k
 As built in SPEC-14 (`research/decisions.md`, 28 September 2026): region `europe-north1`, service-level maximum of one instance, and a deploy from source that also uses Cloud Build and a Cloud Storage bucket in the deployment project. The reference run is read-only on the public demo.
 
 Scope change, 29 September 2026 (`research/decisions.md`, TOR 1.6 §10): the deployed service also runs a new document live, through the key project's Gemini key read from Secret Manager in the deployment project, with instance-based billing. This supersedes "no API key is deployed" above. The key's project still has no billing, the key is never in the repository, the image or CI, and CI still tests the image offline with no key.
+
+Reversed, 7 October 2026 (`research/decisions.md`, TOR 1.8 §10): at the supervisor's request the deployed service is offline again, switched with the README's kill switch without a rebuild, and billed per request. "No API key is deployed" holds again for the service's configuration; the secret stays in Secret Manager, referenced by nothing, until the teardown. `deploy/deploy.sh` always deploys live, so it is not run while the service is meant to stay offline.
 
 ### 10.3 CI
 
@@ -969,10 +971,10 @@ State these in the report before the committee asks.
 
 ---
 
-## 15. Diploma continuation
+## 15. Continuation
 
 The practice ends with a working, reproducible slice and one honest unanswered question. The strongest candidate:
 
 > Does strict source verification let a cheap, fast model match or beat a frontier model that is trusted without verification — and at what point does the recall penalty outweigh the safety gain?
 
-That question needs the provider abstraction (built), the cache (built), the metrics (built) and the gold standard (built). It needs a second and third document, a second annotator, and a cost model. That is a diploma, and it starts from a green CI rather than from zero.
+That question needs the provider abstraction (built), the cache (built), the metrics (built) and the gold standard (built). It needs a second and third document, a second annotator, and a cost model. That is a project of its own, and it starts from a green CI rather than from zero.

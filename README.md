@@ -43,8 +43,8 @@ the evidence, are under [Key decisions](#key-decisions).
 | M3 | These documents, the decision on the live service, and the 5–7 minute demonstration | Done on 3 October 2026, tagged `defense` in [`spectrace-dev`][t-def-dev] and [SpecTrace-docs][t-def-docs] |
 
 - **The system:** a .NET pipeline and command line, and a server-rendered review UI. It runs publicly at
-  [spectrace-5zrm6uxcja-lz.a.run.app][live], where corpus documents replay from the committed cache and a new
-  document runs live.
+  [spectrace-5zrm6uxcja-lz.a.run.app][live] in offline mode: corpus documents replay from the committed cache, and
+  no model is called. From 29 September to 7 October 2026 it also ran a new document live.
 - **Who did what:** a coding agent wrote most of the code and documents. The student set the scope, took the
   decisions recorded as theirs, annotated the gold standard, captured the chat transcripts and reviews the reference
   run. The record is in [`docs/agent-worklog.md`][worklog].
@@ -54,11 +54,11 @@ the evidence, are under [Key decisions](#key-decisions).
 Each figure is in the linked file, which anyone can regenerate with one command. The sample size is beside each one.
 
 - **What verification holds back.** On RFC 6902, with the same model, temperature 0 and the same verifier:
-  - 81.3% of a naive prompt's quotes are not in the document verbatim (13 of 16). Almost all of them were changed in
+  - 81.3% of a simple prompt's quotes are not in the document verbatim (13 of 16). Almost all of them were changed in
     one way: double quotation marks rewritten as single ones.
   - The pipeline's quotes: 0.0% (0 of 18).
   - A chat assistant's answer, captured by hand: every one of its 18 quotes was found.
-  - On RFC 10050, published after the model's knowledge cutoff, the three are close: chat 9.5%, naive prompt 9.1%,
+  - On RFC 10050, published after the model's knowledge cutoff, the three are close: chat 9.5%, simple prompt 9.1%,
     pipeline 3.3%.
 
   One run per arm, 16 to 30 claims each: [`experiments/headline.md`][headline],
@@ -94,8 +94,8 @@ regenerates them from the committed cache, and CI fails if one of them changes. 
 a quote found twice, a sentence read two ways, a requirement no case could be written for — it handed the question
 to a person instead of guessing.
 
-**Ready for what the course asks, and not more.** Someone outside the project can rerun it, read why each decision
-was made, and see it handle a document nobody recorded. But:
+**Ready for what the course asks, and not more.** Someone outside the project can rerun it and read why each decision
+was made; with a Gemini key of their own, they can run it on a document nobody recorded. But:
 - its quality is measured on one document, with one model and one annotator;
 - its review was decided by one person, who is also its author.
 
@@ -105,9 +105,10 @@ Those limits are stated in [`docs/limitations.md`][limitations], not hidden.
 
 - [`docs/limitations.md`][limitations] says what these results allow the project to claim and what they do not.
 - [`docs/privacy-safety.md`][privacy] says what a run sends to the model and where. It also covers the use
-  restriction the public service runs against.
-- NFR-04 is not met: the provider and the model are constants in [`LlmClientFactory.cs`][factory], so another
-  provider or model is a code change, not a configuration change.
+  restriction the public service ran against until 7 October 2026.
+- NFR-04 is not met: the provider is a constant in [`LlmClientFactory.cs`][factory] and only Gemini is implemented,
+  so another provider is a code change, not a configuration change. Another Gemini model can be named only on the
+  command line, with `--model`.
 
 ## How to rerun it
 
@@ -127,13 +128,13 @@ the review UI and the experiment are in [spectrace-dev's README][dev-readme].
 
 | Decision | Alternatives | Evidence | Status |
 |---|---|---|---|
-| .NET and C# | Python, Node and TypeScript | The student's existing skill, and a codebase a diploma can reuse | Kept |
+| .NET and C# | Python, Node and TypeScript | The student's existing skill, and a codebase that can be developed further | Kept |
 | The model returns quote text; code finds its position | Positions reported by the model | Code can check a quote's position exactly; a model's offsets cannot be checked. By exact match, the reference run located 14 of 18 quotes once and sent the 4 found twice to a person. | Kept |
 | Every model call cached under its full request, temperature 0 | No cache; a live call on every run | CI replays the reference run offline on Linux and Windows and compares it byte for byte | Kept |
 | Gemini 3.5 Flash-Lite as the model, from 23 September | Gemini 3.5 Flash, as planned | Flash's free tier allowed 20 requests a day, less than one run; Flash-Lite allowed 500 | The planned model replaced |
 | No chunking: the whole document in one request | Chunked extraction | The rule fixed in advance cannot fire on RFC 6902: no gold requirement lies in its last third. Absence of evidence, not evidence ([`chunking-decision.md`][chunk]). | Kept |
 | A gold standard sized by rules frozen in advance: 19 requirements | 30–50 requirements, as first planned | A keyword scan finds 20 candidate sentences; under the frozen rules 18 are kept, giving 19 requirements. 30 would mean counting what the extraction excludes, or padding. | Changed; awaits the supervisor's approval |
-| A baseline prompt that asks for quotes | The first baseline prompt, which asked for test cases only | Nothing in an answer of test cases alone can be checked against the source | The first prompt replaced |
+| A simple prompt that asks for quotes | The first simple prompt, which asked for test cases only | Nothing in an answer of test cases alone can be checked against the source | The first prompt replaced |
 | The review log outside the run folder | A log inside `runs/{runId}/` | A log inside the reference run would break its byte-for-byte test, and a stray decision in a committed folder could never be removed | Changed during SPEC-13 |
 | The review UI can start a run | Runs from the command line only | Review and the demonstration need a person reviewing a real run in the browser | Kept |
 

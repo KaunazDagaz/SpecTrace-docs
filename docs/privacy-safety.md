@@ -10,7 +10,7 @@ put into SpecTrace. The terms are quoted as read on 1 October 2026, and the prov
 |---|---|---|
 | Extraction, one per run | The whole document, after the line `DOCUMENT ID: <name>` | [`RequirementExtractor.cs`][extractor] |
 | Test case generation, one per testable requirement | That requirement's section number and its quote, nothing else | [`TestCaseGenerator.cs`][generator] |
-| The naive baseline, from the command line only | The baseline prompt and the whole document | [`BaselineRun.cs`][baseline] |
+| The simple prompt (the baseline arm), from the command line only | That prompt and the whole document | [`BaselineRun.cs`][baseline] |
 
 Each call also carries its system prompt, one of the files in [`src/SpecTrace.Pipeline/Prompts/`][prompts]. Nothing
 else is sent. No reviewer's name or review decision ever reaches the model, because review actions never call it
@@ -22,7 +22,7 @@ else is sent. No reviewer's name or review decision ever reaches the model, beca
 |---|---|
 | Offline: `--offline` or `SPECTRACE_OFFLINE=1`, in CI, and in the container image by default | Nowhere. Every answer is replayed from the committed cache, no key is read, and a call that is not in the cache ends the run. |
 | Live on your own machine: the command line or the review UI without `--offline` | The Gemini API, through the key in your environment, on your Google Cloud project. The terms that apply are the ones for you as that key's developer. |
-| [The public service][readme-deployment] | The Gemini API, through the author's key, read from Secret Manager in the deployment project. Every visitor's upload goes through it. |
+| [The public service][readme-deployment] | Nowhere, since 7 October 2026: it runs offline, as the container image does by default. From 29 September to 7 October 2026 it ran live, and a visitor's upload that was not in the cache went to the Gemini API through the author's key, read from Secret Manager in the deployment project. |
 
 ## What the provider's terms say happens to it
 
@@ -46,24 +46,26 @@ Policy to maintain the safety and security of the Services, and any required leg
 
 What that means here:
 
-- **On the public service**, the key's developer is the author, who is in the European Economic Area. The Paid
-  Services terms apply: uploads are not used to improve Google's products, and are logged for a limited period.
+- **On the public service**, nothing is sent since 7 October 2026. While it ran live, the key's developer was the
+  author, who is in the European Economic Area, so the Paid Services terms applied: uploads were not used to improve
+  Google's products, and were logged for a limited period.
 - **Live on your own machine**, it depends on where you are. Outside the EEA, Switzerland and the United Kingdom, the
   unpaid terms apply to what you send: Google may use it to improve its products, and people may read it.
 - **Either way, upload public specifications only.** Nothing personal and nothing belonging to an employer enters
   the system ([`BLUEPRINT.md`][blueprint] §4–§5), whatever the provider does with it.
 
-## The public service runs against a use restriction
+## The public service ran against a use restriction until 7 October 2026
 
 The same terms say, under "Use Restrictions":
 
 > "You may use only Paid Services when making API Clients available to users in the European Economic Area,
 > Switzerland, or the United Kingdom."
 
-The public service runs on the key project's unpaid quota. The student decided on 1 October 2026 to keep it live, to
-show the system working on new documents, and accepts that risk. The decision, the options it was chosen from and
-the way back are in [`research/decisions.md`][decision]. The README's [kill switch][readme-deploy] turns the service
-offline without a rebuild.
+From 29 September to 7 October 2026 the public service ran live, on the key project's unpaid quota. The student
+decided on 1 October 2026 to keep it live, to show the system working on new documents, and accepted that risk. On
+7 October 2026, at the supervisor's request, the student turned it offline with the README's
+[kill switch][readme-deploy], without a rebuild, and since then it makes no call to the Gemini API. Both decisions,
+and the options they were chosen from, are in [`research/decisions.md`][decision].
 
 ## What is kept, where, and for how long
 
@@ -81,15 +83,17 @@ offline without a rebuild.
 
 - That an upload is a public specification. Only the banner and the form ask for it.
 - Who reviews. There are no accounts, and anyone can review under any name.
-- How the daily quota is shared. Every visitor to the public service draws on the same one.
+- How a key's daily quota is shared. While the public service ran live, every visitor drew on the same one.
 
 ## The key
 
 - **Locally:** `GEMINI_API_KEY` in the environment, never in a file of the repository. `.env.example` holds names, not
   values.
-- **On the public service:** a reference to a pinned version of the Secret Manager secret `gemini-api-key`, which
-  `deploy/deploy.sh` sets and then checks. The key is never in the image, a build argument, a plain variable, the
-  repository or CI ([README, Reproducibility and secrets][readme-secrets]).
+- **On the public service:** none since 7 October 2026, when the kill switch removed the reference. While the
+  service ran live, it held a reference to a pinned version of the Secret Manager secret `gemini-api-key`, which
+  `deploy/deploy.sh` set and then checked. The secret stays in Secret Manager, referenced by nothing, until the
+  README's teardown. The key was never in the image, a build argument, a plain variable, the repository or CI
+  ([README, Reproducibility and secrets][readme-secrets]).
 - **In CI:** no key, offline (REQ-DEP-01, NFR-06).
 - **Billing:** the key's project has no billing, so a call on it cannot be billed (REQ-DEP-02).
 
