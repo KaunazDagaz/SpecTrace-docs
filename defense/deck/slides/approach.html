@@ -1,55 +1,51 @@
-<section id="approach" data-transition="fade" style="background:#F6F5F1;color:#1B2433;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
-<h2 style="font-family:'IBM Plex Sans', Arial, sans-serif;font-size:64px;font-weight:600;line-height:1.15;color:#1B2433">Подход: модель предлагает, код проверяет</h2>
-<div style="display:flex;gap:16px">
-<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FDFCF9;padding:24px;border:1px solid #D9D5CA;border-radius:16px">
-<p style="font-size:24px;color:#5A6472">1</p>
-<h3 style="font-size:30px;font-weight:600;line-height:1.2;color:#1B2433">Документ</h3>
-<p style="font-size:24px;font-weight:600;color:#5A6472">вход: .txt</p>
-</div>
-<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FDFCF9;padding:24px;border:1px solid #D9D5CA;border-radius:16px">
-<p style="font-size:24px;color:#5A6472">2</p>
-<h3 style="font-size:30px;font-weight:600;line-height:1.2;color:#1B2433">Извлечение требований</h3>
-<p style="font-size:24px;font-weight:600;color:#B4530F">модель</p>
-</div>
-<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FDFCF9;padding:24px;border:1px solid #D9D5CA;border-radius:16px">
-<p style="font-size:24px;color:#5A6472">3</p>
-<h3 style="font-size:30px;font-weight:600;line-height:1.2;color:#1B2433">Проверка цитат</h3>
-<p style="font-size:24px;font-weight:600;color:#1F5FAD">код</p>
-</div>
-<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FDFCF9;padding:24px;border:1px solid #D9D5CA;border-radius:16px">
-<p style="font-size:24px;color:#5A6472">4</p>
-<h3 style="font-size:30px;font-weight:600;line-height:1.2;color:#1B2433">Генерация тест-кейсов</h3>
-<p style="font-size:24px;font-weight:600;color:#B4530F">модель</p>
-</div>
-<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FDFCF9;padding:24px;border:1px solid #D9D5CA;border-radius:16px">
-<p style="font-size:24px;color:#5A6472">5</p>
-<h3 style="font-size:30px;font-weight:600;line-height:1.2;color:#1B2433">Матрица и пробелы</h3>
-<p style="font-size:24px;font-weight:600;color:#1F5FAD">код</p>
-</div>
-<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FDFCF9;padding:24px;border:1px solid #D9D5CA;border-radius:16px">
-<p style="font-size:24px;color:#5A6472">6</p>
-<h3 style="font-size:30px;font-weight:600;line-height:1.2;color:#1B2433">Решение человека</h3>
-<p style="font-size:24px;font-weight:600;color:#1B2433">человек</p>
-</div>
-</div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:24px 48px">
-<div style="display:flex;gap:16px;align-items:start">
-<x-icon name="Search" style="color:#1F5FAD;width:40px;height:40px"></x-icon>
-<p style="font-size:30px;line-height:1.4;color:#1B2433">Модель возвращает только текст цитаты — место в документе находит код.</p>
-</div>
-<div style="display:flex;gap:16px;align-items:start">
-<x-icon name="Warning" style="color:#B4530F;width:40px;height:40px"></x-icon>
-<p style="font-size:30px;line-height:1.4;color:#1B2433">Цитаты нет в тексте — требование отброшено и показано отдельно; цитата встречается дважды — решает человек.</p>
-</div>
-<div style="display:flex;gap:16px;align-items:start">
-<x-icon name="Database" style="color:#1F5FAD;width:40px;height:40px"></x-icon>
-<p style="font-size:30px;line-height:1.4;color:#1B2433">Каждый вызов модели закэширован: прогон воспроизводится офлайн, без ключа.</p>
-</div>
-<div style="display:flex;gap:16px;align-items:start">
-<x-icon name="Check" style="color:#1B2433;width:40px;height:40px"></x-icon>
-<p style="font-size:30px;line-height:1.4;color:#1B2433">Никаких выводов о полноте: только «в реестре нет непокрытых требований».</p>
-</div>
-</div>
-<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#5A6472">Принципы P1–P7: SpecTrace-docs, BLUEPRINT.md §9 · далее — демонстрация</p>
-<aside>Около 45 секунд. Модель делает только две вещи: предлагает требования в виде цитат и пишет тест-кейсы к проверенным требованиям. Всё остальное делает код: находит каждую цитату в тексте дословно, собирает матрицу и показывает пробелы. Если цитаты нет в тексте, требование отбрасывается и показывается отдельно; если цитата встречается дважды, решает человек. Каждый вызов модели закэширован, поэтому весь прогон повторяется без ключа и без сети. Система никогда не говорит, что спецификация покрыта полностью. Переход к демонстрации на стенде в офлайн-режиме, около пяти минут: путь одного требования от исходного текста до тест-кейса и матрицы, исправленный и отклонённый кейс, отказы угадывать и оставшийся пробел.</aside>
+<section id="approach" data-transition="fade" style="background:#f6f5f1">
+  <p id="e1-1jb5d4p" style="position:absolute; bottom:64px; left:128px; width:1664px; font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; color:#5a6472">Принципы P1–P7: SpecTrace-docs, BLUEPRINT.md §9 · далее — демонстрация</p>
+  <h2 id="pf0bfb28d3967r0-9f432593" style="position:absolute; top:128px; left:128px; width:1664px; font-family:'IBM Plex Sans', Arial, sans-serif; font-size:64px; font-weight:600; line-height:1.15; color:#1b2433">Подход: модель предлагает, код проверяет</h2>
+  <div id="pf0bfb28d3967r1-9f432593" style="position:absolute; top:250px; left:128px; width:1664px; height:213px; display:flex; flex-direction:row; gap:16px">
+    <div style="display:flex; flex-direction:column; gap:12px; flex:1; padding:24px; background:#fdfcf9; border:1px solid #d9d5ca; border-radius:16px">
+      <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; color:#5a6472">1</p>
+      <h3 style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:30px; font-weight:600; line-height:1.2; color:#1b2433">Документ</h3>
+      <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; font-weight:600; color:#5a6472">вход: .txt</p>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:12px; flex:1; padding:24px; background:#fdfcf9; border:1px solid #d9d5ca; border-radius:16px">
+      <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; color:#5a6472">2</p>
+      <h3 style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:30px; font-weight:600; line-height:1.2; color:#1b2433">Извлечение требований</h3>
+      <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; font-weight:600; color:#b4530f">модель</p>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:12px; flex:1; padding:24px; background:#fdfcf9; border:1px solid #d9d5ca; border-radius:16px">
+      <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; color:#5a6472">3</p>
+      <h3 style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:30px; font-weight:600; line-height:1.2; color:#1b2433">Проверка цитат</h3>
+      <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; font-weight:600; color:#1f5fad">код</p>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:12px; flex:1; padding:24px; background:#fdfcf9; border:1px solid #d9d5ca; border-radius:16px">
+      <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; color:#5a6472">4</p>
+      <h3 style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:30px; font-weight:600; line-height:1.2; color:#1b2433">Генерация тест-кейсов</h3>
+      <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; font-weight:600; color:#b4530f">модель</p>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:12px; flex:1; padding:24px; background:#fdfcf9; border:1px solid #d9d5ca; border-radius:16px">
+      <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; color:#5a6472">5</p>
+      <h3 style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:30px; font-weight:600; line-height:1.2; color:#1b2433">Матрица и пробелы</h3>
+      <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; font-weight:600; color:#1f5fad">код</p>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:12px; flex:1; padding:24px; background:#fdfcf9; border:1px solid #d9d5ca; border-radius:16px">
+      <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; color:#5a6472">6</p>
+      <h3 style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:30px; font-weight:600; line-height:1.2; color:#1b2433">Решение человека</h3>
+      <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; font-weight:600; color:#1b2433">человек</p>
+    </div>
+  </div>
+  <div id="pf0bfb28d3967r2-9f432593" style="position:absolute; top:510px; left:128px; width:1664px; height:210px; display:grid; grid-template-columns:1fr 1fr">
+    <div style="display:flex; flex-direction:row; gap:16px; align-items:start">
+      <x-icon name="Search" style="width:40px; height:40px; color:#1f5fad"></x-icon>
+      <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:30px; line-height:1.4; color:#1b2433">Модель возвращает только текст цитаты — место в документе находит код.</p>
+    </div>
+    <div style="display:flex; flex-direction:row; gap:16px; align-items:start">
+      <x-icon name="Warning" style="width:40px; height:40px; color:#b4530f"></x-icon>
+      <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:30px; line-height:1.4; color:#1b2433">Цитаты нет в тексте — требование отброшено и показано отдельно; цитата встречается дважды — решает человек.</p>
+    </div>
+    <div style="display:flex; flex-direction:row; gap:16px; align-items:start">
+      <x-icon name="Database" style="width:40px; height:40px; color:#1f5fad"></x-icon>
+      <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:30px; line-height:1.4; color:#1b2433">Каждый вызов модели закэширован: прогон воспроизводится офлайн, без ключа.</p>
+    </div>
+  </div>
+  <aside>Около 45 секунд. Модель делает только две вещи: предлагает требования в виде цитат и пишет тест-кейсы к проверенным требованиям. Всё остальное делает код: находит каждую цитату в тексте дословно, собирает матрицу и показывает пробелы. Если цитаты нет в тексте, требование отбрасывается и показывается отдельно; если цитата встречается дважды, решает человек. Каждый вызов модели закэширован, поэтому весь прогон повторяется без ключа и без сети. Переход к демонстрации на стенде в офлайн-режиме, около пяти минут: путь одного требования от исходного текста до тест-кейса и матрицы, исправленный и отклонённый кейс, отказы угадывать и оставшийся пробел.</aside>
 </section>

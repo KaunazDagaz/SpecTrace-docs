@@ -306,6 +306,9 @@ for visitors' runs, decisions or cache entries.
 so the banner's sentence and the risk above that say inputs may be used to improve Google's models do not hold as
 written.*
 
+*Superseded on 7 October 2026 by the entry of that date: the public service is offline again and runs no document
+live.*
+
 ---
 
 ## 1 October 2026 — The public demo stays live on unpaid quota, against the Gemini API Use Restriction
@@ -387,3 +390,65 @@ README's teardown steps end the service after the defense.
   provider's models.
 
 **Not decided here.** A legal reading of the terms; Paid Services; any change to what the service does.
+
+*Superseded on 7 October 2026 by the entry below: the student chose option (a), and the public service is offline
+again.*
+
+---
+
+## 7 October 2026 — The public demo returns to offline, at the supervisor's request
+
+**Decided by:** the student, on 7 October 2026, at the supervisor's request.
+
+**The request.** In comments sent on 7 October 2026, the supervisor asked that before the defense the public service
+be switched to offline mode, replaying cached results: a live run on the free quota does not comply with the
+provider's restriction quoted in the entry of 1 October 2026.
+
+**Decision.** Option (a) of the entry of 1 October 2026: the public service is switched back to offline with the
+README's kill switch, without a rebuild:
+`gcloud run services update spectrace --project spectrace-deploy --region europe-north1 --remove-env-vars SPECTRACE_OFFLINE --remove-secrets GEMINI_API_KEY --cpu-throttling`.
+The image's own `SPECTRACE_OFFLINE=1` applies again, and the service is billed per request again.
+
+**What the service does now.** It shows the reference run with its committed review, read-only, and replays the
+corpus documents from the committed cache as a visitor's own runs. Any other upload ends with a cache-miss message,
+never a model call. The service makes no call to the Gemini API, so it no longer runs on unpaid quota.
+
+**Done.** The student ran the kill switch from Cloud Shell on 7 October 2026; the service then served revision
+`spectrace-00008-bhz`, with all traffic. `deploy/smoke-test.sh` against the public URL, without `--live`, then
+passed all 18 checks.
+
+**What it costs.** A visitor can no longer try SpecTrace on a document of their own on the public service. A new
+document runs live only on one's own machine, with a Gemini key of one's own, and such a run stays a demonstration,
+never evidence. The demonstration at the defense replays cached runs only. Every committed result already comes from
+a local run whose cache is committed, so no figure changes (P5).
+
+**What stays as it was.**
+
+- The code, the image, CI and `deploy/smoke-test.sh`. The banner already says when the server runs offline, and CI
+  already tests the image offline, with no key.
+- The secret `gemini-api-key` stays in Secret Manager in the deployment project, referenced by nothing, until the
+  README's teardown deletes it. The key itself stays in the key project.
+- `deploy/deploy.sh` always deploys live: it sets `SPECTRACE_OFFLINE=0` and the key's secret reference. It is not
+  run while this decision holds. Redeploying the service offline would first need an offline mode in the script, a
+  change to `spectrace-dev` that is not made here.
+
+**What this changes in other documents.**
+
+- `spec/TOR.md` 1.8: §10's deliverable returns to the wording of version 1.5, the deployed review UI in offline mode
+  with no key required. §11's live-service risk is closed, and kept as a record of 29 September to 7 October 2026.
+  A same-principle refinement under §13(b). No principle in `BLUEPRINT.md` §9 changes.
+- `research/IMPLEMENTATION_PLAN.md` §10.2 gains a note pointing here, after the note on the scope change of
+  29 September.
+- `README.md`, `README.ru.md`, `docs/privacy-safety.md` and `docs/limitations.md` say that the public service is
+  offline.
+- In `spectrace-dev`, the README's Status, Deployment, Layout and Reproducibility and secrets sections say the same,
+  and the service's history records this switch.
+- The SPEC-14 entry of 28 September: what the service does matches its boundaries again. It is offline, and its
+  configuration holds no key.
+- The entries of 29 September and 1 October above: superseded, where they make the service live.
+- `BLUEPRINT.md` 1.2 §8's hosting row names instance-based billing since 29 September 2026; after the kill switch the
+  service is billed per request again. Changing that row is a blueprint change, for the supervisor's re-approval, and
+  is not made here.
+
+**Not decided here.** Deleting the key in AI Studio, or the secret, before the teardown; making the service live
+again; Paid Services.

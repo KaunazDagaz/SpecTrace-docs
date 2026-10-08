@@ -1,10 +1,10 @@
 # SpecTrace — Project Blueprint
 
-**Status:** Version 1.0 approved; versions 1.1 and 1.2 awaiting supervisor re-approval
-**Version:** 1.2
+**Status:** Version 1.0 approved; versions 1.1 to 1.3 awaiting supervisor re-approval
+**Version:** 1.3
 **Course:** EHU AI-Native Engineering Practice 2026 — LAB 04 Applied Intelligent Systems
 **Author:** Mikita
-**Approved:** version 1.0 on 16 September 2026, by the practice supervisor *(date assumed as today — correct if the actual date differs)*. Versions 1.1 and 1.2 are not yet approved.
+**Approved:** version 1.0 on 16 September 2026, by the practice supervisor *(date assumed as today — correct if the actual date differs)*. Versions 1.1, 1.2 and 1.3 are not yet approved.
 
 ---
 
@@ -23,6 +23,7 @@ Two documents already exist downstream of this one — `TOR.md` (frozen, numbere
 | 1.0 | 16 September 2026 | Approved. | — |
 | 1.1 | 26 September 2026 | §4: the size of the ground truth is set by the frozen annotation rules instead of being fixed at 30–50 requirements. | RFC 6902 carries a BCP 14 keyword in 18 sentences. Reaching 30 would mean counting statements the extraction prompt excludes, or padding the set to meet a number. `TOR.md` 1.2 §9 changes with it. No principle in §9 changes. Awaiting supervisor re-approval. |
 | 1.2 | 3 October 2026 | §4: the input's redistribution terms and the provider's data-use terms are confirmed, and the caveat says what the terms are. §7: the questions on those terms and on the choice of the second document are removed, the chunking question says what TOR 1.4 decided, and the memorization question names the second document. §8: the provider row names Gemini Flash-Lite, and the hosting row names instance-based billing. | The blueprint lagged the system (M2 acceptance note, divergences D3, D5 and D12). TOR 1.3 chose RFC 10050 as the second document, TOR 1.4 closed the chunking trigger, and TOR 1.7 closed the redistribution and data-use terms. Flash-Lite replaced Flash on 23 September 2026, when Flash's free tier allowed 20 requests a day, less than one full run. Since 29 September 2026 the service has been billed by instance time, so that a live run keeps its CPU after the upload request returns. No principle in §9 changes. Awaiting supervisor re-approval, together with 1.1. |
+| 1.3 | 8 October 2026 | §5 and §8: wording only. §5's heading for what is set aside for later is shortened, and §8's runtime row says the codebase can be developed further. | The documents follow the defense materials. No scope, decision or principle changes. Awaiting supervisor re-approval, together with 1.1 and 1.2. |
 
 ---
 
@@ -78,7 +79,7 @@ With this system: every requirement is anchored to an exact, checkable location 
 
 **In this version:** one document per run; requirement extraction with mandatory source verification; test case generation limited to verified requirements; a traceability matrix with visible gaps; a human review step with a permanent decision record; comparison against a naive single-prompt baseline and, for demonstration only, against an untooled public chat run.
 
-**Deliberately set aside for later (the diploma horizon):** following a specification as it changes across versions; the system itself reading from or writing to GitHub or Linear; connecting requirements to real automated tests in a codebase; a controlled study measuring time actually saved by QA staff; agent-authored pull requests.
+**Deliberately set aside for later:** following a specification as it changes across versions; the system itself reading from or writing to GitHub or Linear; connecting requirements to real automated tests in a codebase; a controlled study measuring time actually saved by QA staff; agent-authored pull requests.
 
 **Never in scope for this system, at any horizon:** any employer's code or specifications; running or compiling the generated test cases; PDF or scanned input; more than one document in a single run.
 
@@ -116,7 +117,7 @@ The template's own later stage (Этап 03, "накопить облако зн
 
 | Question | Options considered | Chosen | Reason | Remaining risk |
 |---|---|---|---|---|
-| Runtime for the pipeline | Python (richer LLM tooling), .NET/C#, Node/TypeScript | .NET/C# | Matches the student's existing skill; produces a codebase directly reusable for a same-domain diploma; no new-tool overhead inside a short window | .NET's LLM-specific tooling is less mature than Python's — more of the provider client may need to be hand-written |
+| Runtime for the pipeline | Python (richer LLM tooling), .NET/C#, Node/TypeScript | .NET/C# | Matches the student's existing skill; produces a codebase that can be developed further; no new-tool overhead inside a short window | .NET's LLM-specific tooling is less mature than Python's — more of the provider client may need to be hand-written |
 | LLM provider for the pipeline | Gemini (free tier), OpenAI, Anthropic | Gemini Flash-Lite (`gemini-3.5-flash-lite`), behind a swappable interface | Zero marginal cost at this scale; context window comfortably fits the whole document in one request. Flash-Lite replaced Flash on 23 September 2026, when Flash's free tier allowed 20 requests a day, less than one full run; Flash-Lite allowed 500 | Free-tier quotas and model availability can change without notice — mitigated by treating the provider as a parameter and caching every response, not by trusting the quota |
 | Where the review UI runs | Local only, Cloud Run, a third-party PaaS | Cloud Run, scale to zero; instance-based billing since 29 September 2026 | The course toolchain already assumes Google Cloud. Billing by instance time lets a live run keep its CPU after the upload request returns, so the cost is no longer about zero; a budget alert watches it | Enabling billing on the same project removes the Gemini free tier — the deployment project and the API-key project must stay separate, as a rule, not a reminder |
 | How to stay reproducible without repeated cost | No caching, or content-addressed caching | Caching every LLM call by a hash of the full request, temperature 0 | Turns a cost-saving trick into the project's strongest reproducibility argument: the whole pipeline replays offline, with no key, indefinitely | Ordinary cache-invalidation care needed if a prompt changes; nothing else identified yet |
